@@ -16,7 +16,8 @@
 > 🧰 deb11_base.sh
 > 🎨.ansi_colors.sh
 > 🔧.bashrc   
-> 💭 README.md                     <-- 📍 YOU ARE HERE
+> 💭 README.md                     <-- 📍 YOU ARE HERE  
+> 📄 LICENSE    
 > ```
 
 
