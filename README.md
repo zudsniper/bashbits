@@ -20,6 +20,10 @@
 > ```
 
 
+## LICENSE
+This code is all MIT Licensed.  
+[`📄 LICENSE`](/LICENSE)  
+
 
 <hr>
 
