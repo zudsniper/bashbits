@@ -97,12 +97,19 @@ echo "$MAIN_USER ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers
 sudo apt-get -y install python3-dev python3-virtualenv build-essential libpq-dev gcc g++ htop \
   curl neovim libmagic1 make git cmake pkg-config gnupg2 unzip zip wget autoconf fail2ban \
   jq postgresql-client rsync bzip2 
+# ==================================== #
+# this is the point where we should really be a user that isn't root
+# sudo su "${MAIN_USER}" || echo -ne "${A_RED}${A_BOLD}wtf no ${A_RESET}${A_INVERSE}${MAIN_USER}${A_RESET}?!\n";
+
+# echo -ne "\n\n${A_GREEN}${A_INVERSE}${A_BOLD}SWITCHED TO MAIN_USER${A_RESET} ${A_YELLOW}${A_UNDERLINE}SETUP IS NOT FINISHED!${A_RESET}\n";
+
+
 # install nvm (node version manager) 
 # (this will be accomplished by the latest version of my `get_nvm.sh` gist. ) 
-yes | curl -sL https://gist.githubusercontent.com/zudsniper/dac0bd4122a00edf7bc00fdbec08956f/raw/get_nvm.sh | /bin/bash -s yes ; 
+$("yes | curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_nvm.sh | /bin/bash -s yes") || echo -ne "${A_RED}${A_BOLD}FAILED TO INSTALL ${A_RESET}${A_PURPLE}nvm${A_RESET}!!\n";
 # install gh 
 # (again, my installer)
-yes | curl -sL https://gist.githubusercontent.com/zudsniper/0ba53973f9e3fe6222ffd1763bc80055/raw/get_gh.sh | /bin/bash -s yes; 
+$("yes | curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_gh.sh | /bin/bash -s yes") || echo -ne "${A_RED}${A_BOLD}FAILED TO INSTALL ${A_RESET}${A_GREEN}gh${A_RESET}!!\n"; 
 
 # install bashrc.zod.tf
 # -- obviously this is my bashrc, and it may not be necessary for you.  
@@ -113,7 +120,7 @@ chmod ugo+x ~/.bashrc
 source ~/.bashrc
 # ^^ VERY NECESSARY to initialize nvm for later.  
 settitle "$(hostname -f)"
-# install `docker`  
+# ------------- install `docker` ----------------- #   
 # TODO: remove that this doesn't install latest, but a version???  
 apt-get -y install apt-transport-https ca-certificates lsb-release
 curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
