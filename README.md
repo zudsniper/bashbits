@@ -10,6 +10,7 @@
 
 > ```
 > 📄 beautify_dir.sh   
+> 📄 docker_merge.sh     
 > 📄 get_gum.sh   
 > 📄 get_gh.sh  
 > 📄 get_nvm.sh                     
