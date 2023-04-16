@@ -21,7 +21,7 @@
 
 
 ## LICENSE
-This code is all MIT Licensed.  
+This code is all **MIT Licensed**.  
 [`📄 LICENSE`](/LICENSE)  
 
 
