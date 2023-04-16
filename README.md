@@ -21,11 +21,19 @@
 > 📄 LICENSE    
 > ```
 
+## ONE-LINERS  
+Install `deb11_base.sh` on a clean install of debian 11.  
+> ❗❗ **MUST BE RUN AS ROOT** ❗❗  
+  
+```sh
+curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/deb11_base.sh -o ~/build.sh; chmod ugo+X ~/build.sh; ./build.sh -r me -pw password -k "ssh-rsa xx"; source ~/.bashrc; settitle "$(hostname -f)";
+```
+> _I guess that's the only one for now lmao_  
+---
 
 ## LICENSE
 This code is all **MIT Licensed**.  
 [`📄 LICENSE`](/LICENSE)  
-
 
 <hr>
 
