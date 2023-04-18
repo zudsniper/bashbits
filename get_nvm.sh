@@ -33,7 +33,7 @@ fi
 
 if [[ ! -f "~/.ansi_colors.sh" ]]; then 
 	#echo -ne "NO COLORS FILE FOUND, DOWNLOADING\n" can't print in .bashrc root
-	curl -sL https://gist.githubusercontent.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59/raw/ansi_colors.sh -o ~/.ansi_colors.sh
+	curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/.ansi_colors.sh -o ~/.ansi_colors.sh
 fi
 
 source ~/.ansi_colors.sh
@@ -41,7 +41,7 @@ source ~/.ansi_colors.sh
 
 echo -ne "${A_GREEN}${A_INVERSE}${A_BOLD}get_gnvm.sh${A_RESET} by zudsniper\n"
 echo -ne "${A_BOLD}DEPENDENCIES${A_RESET}\n"
-echo -ne "${A_GRAY}${A_ITALIC}    ${A_UNDERLINE}https://bashrc.zod.tf/${A_RESET}\n\n"
+# echo -ne "${A_GRAY}${A_ITALIC}    ${A_UNDERLINE}https://bashrc.zod.tf/${A_RESET}\n\n"
 
 # PARSE ARGS
 case "$1" in
@@ -63,7 +63,7 @@ fi
 
 echo -ne "--------------------------------------------------------\n";
 echo -ne "${A_BLUE}${A_BOLD}Installing essentials... you should probably already have these ${A_RESET}\n";
-apt-get $YES_FLAG install git curl build-essential sudo;
+sudo apt-get $YES_FLAG install git curl build-essential sudo;
 echo -ne "--------------------------------------------------------\n";
 echo -ne "${A_PURPLE}${A_BOLD}Cloning current nvm release from git...${A_RESET}\n";
 
