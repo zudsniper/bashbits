@@ -42,7 +42,7 @@ fi
 # Check if .ansi_colors.sh exists, and if not, download it from Github
 if [ ! -f "$HOME/.ansi_colors.sh" ]; then
   echo "${A_LIGHTGREY}Downloading ${A_BOLD}.ansi_colors.sh${A_RESET}${A_LIGHTGRAY}...${A_RESET}"
-  curl -sSf "https://gist.githubusercontent.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59/raw/.ansi_colors.sh" > "$HOME/.ansi_colors.sh"
+  curl -sSf "https://raw.githubusercontent.com/zudsniper/bashbits/master/.ansi_colors.sh" > "$HOME/.ansi_colors.sh"
 fi
 
 # source the colors
