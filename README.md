@@ -4,11 +4,18 @@
   
 ### by [@zudsniper](https://github.com/zudsniper)  
 
+## VERSIONING  
+The versions for these are pretty asynchronous, and certainly NOT AT ALL kept track of. YMMV.  
+### _`v2.0.1`_
+
 --- 
 
-## `FILES`
+## FILES
 
 > ```
+> 📁 anim_cli ✨  
+>    📄 intro-fs.sh  
+>    📄 shellwash-fs.sh   
 > 📄 beautify_dir.sh   
 > 📄 docker_merge.sh     
 > 📄 get_gum.sh   
