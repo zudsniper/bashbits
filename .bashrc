@@ -324,8 +324,8 @@ dispatchPort() {
 
 # ----------------------------- #
 #         my installers
-alias get_gh="curl -sL https://gist.githubusercontent.com/zudsniper/0ba53973f9e3fe6222ffd1763bc80055/raw/get_gh.sh | /bin/bash";
-alias get_nvm="curl -sL https://gist.githubusercontent.com/zudsniper/dac0bd4122a00edf7bc00fdbec08956f/raw/get_gnvm.sh | /bin/bash";
+alias get_gh="curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_gh.sh | /bin/bash";
+alias get_nvm="curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_nvm.sh | /bin/bash";
 
 # ----------------------------- #
 #        set shell title
@@ -433,8 +433,9 @@ else
 fi
 
 }
-
+# THIS IS NO LONGER A GIST SO THIS DOESN'T WORK
 updateMyself() {
+	return
 	me=`basename "$0"`;
 	export dirr=$(pwd);
 	cd "$(dirname "$0")";
@@ -443,50 +444,26 @@ updateMyself() {
 	cd "${dirr}"; 
 }
 
-# update myself if out of date & push is not selected
-if [[ $1 -ne gpush ]]; then
-    updateGistInfo https://gist.github.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59 .bashrc
-fi
 
-if [[ $# -eq 0 ]]; then
+# THIS IS NO LONGER A GIST SO THIS DOESN'T WORK
+
+# update myself if out of date & push is not selected
+#if [[ $1 -ne gpush ]]; then
+#    updateGistInfo https://gist.github.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59 .bashrc
+#fi
+
+# THIS IS NO LONGER A GIST SO THIS DOESN'T WORK
+
+#if [[ $# -eq 0 ]]; then
 	# do nothing
 	# echo -ne "${A_BOLD}Hi! ${A_RESET} i'm zudsniper.\n\n"
-	no=1
-elif [[ $1 -eq gpush ]]; then
-	updateMyself
-fi
+#	no=1
+#elif [[ $1 -eq gpush ]]; then
+#	updateMyself
+#fi
 
+# REMOVED SHITTY INSTALL SCRIPT FOR NVM, USE get_nvm ALIAS
 
-# ----------------------------- #
-#        !!! WARNING !!!
-#   (BROKEN, INFINITE LOOP) install nvm
-function installNVM() {
-
-	if [[ $# -ne 0 ]]; then
-		echo -ne "${A_PURPLE}${A_BOLD}Installing nvm...${A_RESET}\n";
-
-		if [[ $1 == "nvm1" ]]; then
-			curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash;
-			source ~/.bashrc;
-			installNVM nvm2;
-		
-		elif [[ $1 == "nvm2" ]]; then 
-			if [ -x "$(command -v nvm)" ]; then
-				nvm install 18.8;
-				nvm alias default 18.8;
-				
-				echo -ne "${A_LPURPLE}node version - ${A_INVERT}v18.8.x${A_RESET}\n";
-			else 
-				installNVM nvm1;
-			fi
-			
-		fi
-	else 
-		echo -ne "${A_RED}${A_BOLD}Failed to include internal argument to NVM installer script. FAILED. ${A_RESET}\n";
-	fi
-
-
-}
 # ----------------------------- #
 #          nvm related
 
