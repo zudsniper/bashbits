@@ -1,7 +1,7 @@
 #!/bin/bash
 # .ansi_colors.sh 
 # --------------
-# V2.1.1 FIX2 
+# V2.1.2 FIX 
 # 
 # This small script exports all ANSI color codes as variables prepended with "A_". It also offers convenience functions
 # ansi, colorize, and cecho. 
@@ -98,16 +98,61 @@ export A_INVERSE="${A_REVERSE}"
 
 # recognize ANSI escape codes
 # @param $1 the text to recognize a color or style name from
-function ansi() {
-  local color="${1^^}"  # Capitalize color name
-  if [[ "${color}" =~ ^(BG|BACKGROUND)_ ]]; then
-    echo "$(ansi "${color#*_}")" | sed "s/^/$(ansi "BG_")/"
-  elif [[ -v "A_${color}" ]]; then
-    echo "${!A_${color}}"  # Return escape code
-  else
-    echo "${A_RED}Error: Invalid color '${color}'.${A_RESET}" >&2
-    return 1
-  fi
+# Define function to recognize ANSI color codes
+ansi() {
+  local color="${1^^}"
+  case "${color}" in
+    BLACK) echo -n "${A_BLACK}" ;;
+    RED) echo -n "${A_RED}" ;;
+    GREEN) echo -n "${A_GREEN}" ;;
+    YELLOW) echo -n "${A_YELLOW}" ;;
+    BLUE) echo -n "${A_BLUE}" ;;
+    PURPLE|VIOLET) echo -n "${A_PURPLE}" ;;
+    CYAN|TURQUOISE) echo -n "${A_CYAN}" ;;
+    WHITE) echo -n "${A_WHITE}" ;;
+    GRAY|GREY|LIGHTGRAY|LIGHTGREY) echo -n "${A_LIGHTGRAY}" ;;
+    DARKGRAY|DARKGREY) echo -n "${A_DARKGRAY}" ;;
+    ORANGE) echo -n "${A_ORANGE}" ;;
+    NAVY|DARKBLUE) echo -n "${A_NAVY}" ;;
+    SKY|LIGHTBLUE) echo -n "${A_SKY}" ;;
+    GOLD) echo -n "${A_GOLD}" ;;
+    SILVER) echo -n "${A_SILVER}" ;;
+    BRONZE) echo -n "${A_BRONZE}" ;;
+    CHARTREUSE) echo -n "${A_CHARTREUSE}" ;;
+    BROWN) echo -n "${A_BROWN}" ;;
+    FORESTGREEN|DARKGREEN) echo -n "${A_FORESTGREEN}" ;;
+    LIMEGREEN) echo -n "${A_LIMEGREEN}" ;;
+    LIGHTGREEN) echo -n "${A_LIGHTGREEN}" ;;
+    MINT) echo -n "${A_MINT}" ;;
+    PINK|LIGHTPINK) echo -n "${A_PINK}" ;;
+    HOTPINK|DARKPINK) echo -n "${A_HOTPINK}" ;;
+    BG_BLACK) echo -n "${A_BG_BLACK}" ;;
+    BG_RED) echo -n "${A_BG_RED}" ;;
+    BG_GREEN) echo -n "${A_BG_GREEN}" ;;
+    BG_YELLOW) echo -n "${A_BG_YELLOW}" ;;
+    BG_BLUE) echo -n "${A_BG_BLUE}" ;;
+    BG_PURPLE|BG_VIOLET) echo -n "${A_BG_PURPLE}" ;;
+    BG_CYAN|BG_TURQUOISE) echo -n "${A_BG_CYAN}" ;;
+    BG_WHITE) echo -n "${A_BG_WHITE}" ;;
+    BG_GRAY|BG_GREY|BG_LIGHTGRAY|BG_LIGHTGREY) echo -n "${A_BG_LIGHTGRAY}" ;;
+    BG_DARKGRAY|BG_DARKGREY) echo -n "${A_BG_DARKGRAY}" ;;
+    BG_ORANGE) echo -n "${A_BG_ORANGE}" ;;
+    BG_NAVY|BG_DARKBLUE) echo -n "${A_BG_NAVY}" ;;
+    BG_SKY|BG_LIGHTBLUE) echo -n "${A_BG_SKY}" ;;
+    BG_GOLD) echo -n "${A_BG_GOLD}" ;;
+    BG_SILVER) echo -n "${A_BG_SILVER}" ;;
+    BG_BRONZE) echo -n "${A_BG_BRONZE}" ;;
+    BG_CHARTREUSE) echo -n "${A_BG_CHARTREUSE}" ;;
+    BG_BROWN) echo -n "${A_BG_BROWN}" ;;
+    BG_FORESTGREEN|BG_DARKGREEN) echo -n "${A_BG_FORESTGREEN}" ;;
+    BG_LIMEGREEN) echo -n "${A_BG_LIMEGREEN}" ;;
+    BG_LIGHTGREEN) echo -n "${A_BG_LIGHTGREEN}" ;;
+    BG_MINT) echo -n "${A_BG_MINT}" ;;
+    BG_PINK|BG_LIGHTPINK) echo -n "${A_BG_PINK}" ;;
+    BG_HOTPINK|BG_DARKPINK) echo -n "${A_BG_HOTPINK}" ;;
+    *) echo -n "${A_RED}" && echo "Error: Invalid color '${color}'." >&2 && echo -n "${A_RESET}" && return 1 ;;
+  esac
+  return 0
 }
 
 # colorizes & styles text, then ECHOs it 
