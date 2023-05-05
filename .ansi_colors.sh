@@ -1,7 +1,7 @@
 #!/bin/bash
 # .ansi_colors.sh 
 # --------------
-# V2.0.1 FIX 
+# V2.1.0 FIX2 
 # 
 # This small script exports all ANSI color codes as variables prepended with "A_". It also offers convenience functions
 # ansi, colorize, and cecho. 
@@ -110,20 +110,23 @@ function ansi() {
   fi
 }
 
-# colorizes & styles text
+# colorizes & styles text, then ECHOs it 
 # @param $1 The text to be colorized. Must be a string. 
 # @params the other parameters are all modifiers, which are translated from text to ANSI color codes. 
 # 
 # the only unique feature is that of the "background" or "bg" parameter, which will take the following color name
 # and use it to try and find a background color instead of the normal foreground color. 
-function colorize() {
+colorize() {
   local text="$1"
   shift  # Remove first argument
   local color_args=()
   local bg_color=""
   while [[ "$#" -gt 0 ]]; do
     local arg="$1"
-    if [[ "${arg^^}" =~ ^(BG|BACKGROUND)$ ]]; then
+    if [[ -z "${arg}" ]]; then
+      shift  # Skip over empty argument
+      continue
+    elif [[ "${arg^^}" =~ ^(BG|BACKGROUND)$ ]]; then
       if [[ "$#" -lt 2 ]]; then
         echo "${A_RED}Error: No color specified after '${arg}'.${A_RESET}" >&2
         return 1
@@ -136,7 +139,7 @@ function colorize() {
         echo "${A_RED}Error: Invalid color '${next_arg}' after '${arg}'.${A_RESET}" >&2
         return 1
       fi
-    elif [[ -n "${arg}" && "${arg}" =~ ^[A-Za-z_]+$ && -v "A_${arg^^}" ]]; then
+    elif [[ "${arg}" =~ ^[A-Za-z_]+$ && -v "A_${arg^^}" ]]; then
       color_args+=("$(ansi "${arg}")")
       shift  # Remove color argument
     else
@@ -146,15 +149,9 @@ function colorize() {
   done
   local colors="${color_args[*]}"
   local bg_colors="$(ansi "BG_${bg_color}")"
-  echo -e "${bg_colors}${colors}${text}${A_RESET}"
-}
-
-# echoes output of colorize called with the same arguments
-function cecho() {
-  echo "$(colorize "$@")"
+  echo -ne "${bg_colors}${colors}${text}${A_RESET}\n"
 }
 
 # EXPORT ALL FUNCTIONS AS BASH GLOBAL IF EXECUTED
 export -f ansi
 export -f colorize
-export -f cecho 
