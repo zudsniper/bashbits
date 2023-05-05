@@ -1,16 +1,17 @@
 #!/bin/bash
 # .ansi_colors.sh 
 # --------------
+# V2.0.1 FIX 
 # 
 # This small script exports all ANSI color codes as variables prepended with "A_". It also offers convenience functions
 # ansi, colorize, and cecho. 
-#
 #
 # by @zudsniper 
 # updated 05/03/2023
 
 # ----------------------------- #
 #  ANSI COLOR ENVIRONMENT VARS
+
 export A_RESET="\033[0m"
 export A_BOLD="\033[1m"
 export A_DIM="\033[2m"
@@ -61,24 +62,44 @@ export A_AQUAMARINE="\033[38;5;86m"
 export A_FOREST="\033[38;5;22m"
 export A_SEAFOAM="\033[38;5;122m"
 export A_ROSE="\033[38;5;211m"
-export A_MELON="\033[38;5;216m"
-export A_CRIMSON="\033[38;5;196m"
-export A_SANGRIA="\033[38;5;126m"
-export A_LIME="\033[38;5;118m"
-export A_LAVENDER="\033[38;5;226m"
+export A_MELON="\033[38;5;208m"
+export A_INDIGO="\033[38;5;93m"
+export A_LIGHT_CYAN="\033[38;5;159m"
+export A_LIGHT_RED="\033[38;5;203m"
+export A_LIGHT_YELLOW="\033[38;5;227m"
+export A_LIGHT_GREEN2="\033[38;5;120m"
+export A_LIGHT_PURPLE="\033[38;5;141m"
+export A_LIGHT_ORANGE="\033[38;5;215m"
+export A_LIGHT_PINK="\033[38;5;218m"
+export A_LIGHT_BLUE2="\033[38;5;33m"
+export A_YELLOW_GREEN="\033[38;5;154m"
+export A_ROYAL_BLUE="\033[38;5;62m"
+export A_CORNFLOWER_BLUE="\033[38;5;69m"
+export A_LIGHT_SKY_BLUE="\033[38;5;153m"
+export A_MEDIUM_BLUE="\033[38;5;27m"
+export A_MEDIUM_GREY="\033[38;5;246m"
+export A_MIDNIGHT_BLUE="\033[38;5;17m"
+export A_SPRING_GREEN="\033[38;5;48m"
+export A_MEDIUM_SPRING_GREEN="\033[38;5;49m"
+export A_DARK_KHAKI="\033[38;5;143m"
+export A_KHAKI="\033[38;5;179m"
+export A_DARK_TURQUOISE="\033[38;5;44m"
+export A_DARK_SLATE_BLUE="\033[38;5;61m"
+export A_MEDIUM_PURPLE="\033[38;5;141m"
+export A_MEDIUM_SEA_GREEN="\033[38;5;70m"
+export A_DARK_SEA_GREEN="\033[38;5;108m"
+export A_LIGHT_SEA_GREEN="\033[38;5;39m"
+export A_LIGHT_GREY2="\033[38;5;250m"
+export A_MEDIUM_GREY2="\033[38;5;241m"
 
 # Handle other names which people might use for the same colors
 export A_RESTORE="${A_RESET}"
 export A_INVERSE="${A_REVERSE}"
-export A_LIGHT_GREY="${A_LIGHT_GRAY}"
-export A_LIGHT_GREY_BOLD="${A_WHITE}${A_BOLD}"
-export A_DARK_GREY="${A_DARK_GRAY}"
-export A_DARK_GREY_BOLD="${A_BLACK}${A_BOLD}"
 
 # recognize ANSI escape codes
 # @param $1 the text to recognize a color or style name from
-ansi() {
-  local color=${1^^}  # Capitalize color name
+function ansi() {
+  local color="${1^^}"  # Capitalize color name
   if [[ "${color}" =~ ^(BG|BACKGROUND)_ ]]; then
     echo "$(ansi "${color#*_}")" | sed "s/^/$(ansi "BG_")/"
   elif [[ -v "A_${color}" ]]; then
@@ -95,21 +116,32 @@ ansi() {
 # 
 # the only unique feature is that of the "background" or "bg" parameter, which will take the following color name
 # and use it to try and find a background color instead of the normal foreground color. 
-colorize() {
+function colorize() {
   local text="$1"
   shift  # Remove first argument
   local color_args=()
   local bg_color=""
-  for arg in "$@"; do
+  while [[ "$#" -gt 0 ]]; do
+    local arg="$1"
     if [[ "${arg^^}" =~ ^(BG|BACKGROUND)$ ]]; then
-      if [[ "$#" -eq 1 ]]; then
+      if [[ "$#" -lt 2 ]]; then
         echo "${A_RED}Error: No color specified after '${arg}'.${A_RESET}" >&2
         return 1
       fi
-      bg_color="${2^^}"
-      shift  # Remove the color argument
+      local next_arg="${2^^}"
+      if [[ -v "A_BG_${next_arg}" ]]; then
+        bg_color="${next_arg}"
+        shift 2  # Remove the color argument and its value
+      else
+        echo "${A_RED}Error: Invalid color '${next_arg}' after '${arg}'.${A_RESET}" >&2
+        return 1
+      fi
     elif [[ -n "${arg}" && "${arg}" =~ ^[A-Za-z_]+$ && -v "A_${arg^^}" ]]; then
       color_args+=("$(ansi "${arg}")")
+      shift  # Remove color argument
+    else
+      echo "${A_RED}Error: Invalid argument '${arg}'.${A_RESET}" >&2
+      shift  # Remove non-string argument
     fi
   done
   local colors="${color_args[*]}"
@@ -118,8 +150,11 @@ colorize() {
 }
 
 # echoes output of colorize called with the same arguments
-cecho() {
+function cecho() {
   echo "$(colorize "$@")"
 }
 
-# ----------------------------- #
+# EXPORT ALL FUNCTIONS AS BASH GLOBAL IF EXECUTED
+export -f ansi
+export -f colorize
+export -f cecho 
