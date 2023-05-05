@@ -1,7 +1,7 @@
 #!/bin/bash
 # .ansi_colors.sh 
 # --------------
-# V2.1.0 FIX2 
+# V2.1.1 FIX2 
 # 
 # This small script exports all ANSI color codes as variables prepended with "A_". It also offers convenience functions
 # ansi, colorize, and cecho. 
@@ -149,9 +149,19 @@ colorize() {
   done
   local colors="${color_args[*]}"
   local bg_colors="$(ansi "BG_${bg_color}")"
-  echo -ne "${bg_colors}${colors}${text}${A_RESET}\n"
+  echo -e "${bg_colors}${colors}${text}${A_RESET}"
+}
+
+function cecho() {
+  local result="$(colorize "$@")"
+  if [[ "$?" -ne 0 ]]; then
+    echo "${result}" >&2
+  else
+    echo "${result}"
+  fi
 }
 
 # EXPORT ALL FUNCTIONS AS BASH GLOBAL IF EXECUTED
 export -f ansi
 export -f colorize
+export -f cecho
