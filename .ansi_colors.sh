@@ -1,7 +1,7 @@
 #!/bin/bash
 # .ansi_colors.sh 
 # --------------
-# V2.1.2 FIX 
+# V2.1.3 FIX 
 # 
 # This small script exports all ANSI color codes as variables prepended with "A_". It also offers convenience functions
 # ansi, colorize, and cecho. 
@@ -99,7 +99,7 @@ export A_INVERSE="${A_REVERSE}"
 # recognize ANSI escape codes
 # @param $1 the text to recognize a color or style name from
 # Define function to recognize ANSI color codes
-ansi() {
+function ansi() {
   local color="${1^^}"
   case "${color}" in
     BLACK) echo -n "${A_BLACK}" ;;
@@ -161,40 +161,40 @@ ansi() {
 # 
 # the only unique feature is that of the "background" or "bg" parameter, which will take the following color name
 # and use it to try and find a background color instead of the normal foreground color. 
-colorize() {
-  local text="$1"
-  shift  # Remove first argument
-  local color_args=()
-  local bg_color=""
-  while [[ "$#" -gt 0 ]]; do
-    local arg="$1"
-    if [[ -z "${arg}" ]]; then
-      shift  # Skip over empty argument
-      continue
-    elif [[ "${arg^^}" =~ ^(BG|BACKGROUND)$ ]]; then
-      if [[ "$#" -lt 2 ]]; then
-        echo "${A_RED}Error: No color specified after '${arg}'.${A_RESET}" >&2
-        return 1
-      fi
-      local next_arg="${2^^}"
-      if [[ -v "A_BG_${next_arg}" ]]; then
-        bg_color="${next_arg}"
-        shift 2  # Remove the color argument and its value
+function colorize() {
+  local result=""
+  local color=""
+  local style=""
+  for arg in "$@"; do
+    if [[ -n "${arg}" && "${arg}" == [a-zA-Z]* ]]; then
+      local uc_arg="${arg^^}"
+      if [[ "${uc_arg}" == BOLD ]]; then
+        style+=";${A_BOLD}"
+      elif [[ "${uc_arg}" == UNDERLINE ]]; then
+        style+=";${A_UNDERLINE}"
+      elif [[ "${uc_arg}" == BG_* ]]; then
+        local bg_color=$(echo "${arg#BG_}" | tr '[:lower:]' '[:upper:]')
+        local ansi_bg_color="$(ansi "${bg_color}" | sed 's/\033\[/\033\[4/')"
+        if [[ $? -ne 0 ]]; then
+          echo -n "${ansi_bg_color}"
+          return 1
+        fi
+        style+=";${ansi_bg_color}"
       else
-        echo "${A_RED}Error: Invalid color '${next_arg}' after '${arg}'.${A_RESET}" >&2
-        return 1
+        local ansi_color="$(ansi "${uc_arg}")"
+        if [[ $? -ne 0 ]]; then
+          echo -n "${ansi_color}"
+          return 1
+        fi
+        color="${ansi_color}"
       fi
-    elif [[ "${arg}" =~ ^[A-Za-z_]+$ && -v "A_${arg^^}" ]]; then
-      color_args+=("$(ansi "${arg}")")
-      shift  # Remove color argument
-    else
-      echo "${A_RED}Error: Invalid argument '${arg}'.${A_RESET}" >&2
-      shift  # Remove non-string argument
     fi
   done
-  local colors="${color_args[*]}"
-  local bg_colors="$(ansi "BG_${bg_color}")"
-  echo -e "${bg_colors}${colors}${text}${A_RESET}"
+  result+="$(echo -n "${1}")"
+  result+="$(echo -n "${color}${style}")"
+  result+="$(echo -n "${A_RESET}")"
+  echo -n "${result}"
+  return 0
 }
 
 function cecho() {
