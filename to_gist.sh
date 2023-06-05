@@ -1,7 +1,7 @@
 #!/bin/bash
 # to_gist.sh
 # ----------
-# v0.3.3
+# v0.3.4
 # 
 # Simple script to upload a secret gist of a private repository subfile or 
 # subdirectory that the authenticated user has access to.  
@@ -135,13 +135,13 @@ upload_as_gist() {
     GIST_ID=$(echo "$gist_output" | grep -oP '(?<=Gist created: ).*')
 }
 
-# Function to get RAW URL of a file from Gist JSON
+# Function to get RAW URL of a file from Gist output
 get_raw_url() {
-    local gist_json=$1
+    local gist_output=$1
     local file_name=$2
     local raw_url
 
-    raw_url=$(echo "$gist_json" | jq -r '.files."'"$file_name"'"."raw_url"')
+    raw_url=$(echo "$gist_output" | grep -F "$file_name" | awk '{print $NF}')
     echo "$raw_url"
 }
 
@@ -153,8 +153,8 @@ list_files() {
 
     cd "$directory"
 
-    local gist_json
-    gist_json=$(gh gist view "$gist_id" --json)
+    local gist_output
+    gist_output=$(gh gist view "$gist_id" -r)
 
     for file in *; do
         if [[ -d $file ]]; then
@@ -165,14 +165,13 @@ list_files() {
         else
             file_emojis=("📃" "📝" "📑" "📄")
             file_emoji=${file_emojis[RANDOM % ${#file_emojis[@]}]}
-            raw_url=$(get_raw_url "$gist_json" "$file")
+            raw_url=$(get_raw_url "$gist_output" "$file")
             log info "${indent}${file_emoji} $raw_url"
         fi
     done
 
     cd ..
 }
-
 
 # ========= MAIN ========== #  
 
