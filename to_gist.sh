@@ -1,7 +1,7 @@
 #!/bin/bash
 # to_gist.sh
 # ----------
-# v0.2.0
+# v0.3.1
 # 
 # Simple script to upload a secret gist of a private repository subfile or 
 # subdirectory that the authenticated user has access to.  
@@ -59,89 +59,81 @@ log() {
     esac
 }
 
-# Parse command-line arguments
-while [[ $# -gt 0 ]]; do
-    key="$1"
+# Parse input string for repository URL and file/folder path
+parse_input_string() {
+    local input_string=$1
+    local repo_url
+    local file_or_folder_path
 
-    case $key in
-        -h|--help)
-            log info "Usage: ./script.sh [options] <repository_url> <file_or_folder_path>"
-            log info "Options:"
-            log info "  --help, -h     Show usage message with color."
-            log info "  --version, -V  Display VERSION variable, if undefined, print \"None\"."
-            log info "  --verbose, -v  Set logging to verbose, excluding \"silly\" level."
-            log info "  --log_level, -l [level]  Set log level (7=silly, 0=critical)."
-            exit 0
-            ;;
-        -V|--version)
-            if [[ -z ${VERSION+x} ]]; then
-                log info "VERSION: None"
-            else
-                log info "VERSION: $VERSION"
-            fi
-            exit 0
-            ;;
-        -v|--verbose)
-            export LOG_LEVEL="verbose"
-            ;;
-        -l|--log_level)
-            shift
-            export LOG_LEVEL="$1"
-            ;;
-        *)
-            REPO_URL="$1"
-            FILE_OR_FOLDER_PATH="$2"
-            break
-            ;;
-    esac
+    if [[ $input_string =~ ^(https?://[^/]+/[^/]+)/(.+)$ ]]; then
+        repo_url=${BASH_REMATCH[1]}
+        file_or_folder_path=${BASH_REMATCH[2]}
+    else
+        log error "Invalid input string. Please provide a valid input string in the format: REPO_URL/FILE_OR_FOLDER_PATH"
+        exit 1
+    fi
 
-    shift
-done
-
-# Check if repository URL and file/folder path are provided
-if [[ -z $REPO_URL || -z $FILE_OR_FOLDER_PATH ]]; then
-    log error "Repository URL and file/folder path are required."
-    exit 1
-fi
+    REPO_URL=$repo_url
+    FILE_OR_FOLDER_PATH=$file_or_folder_path
+}
 
 # Check if git is installed
-if ! command -v git >/dev/null 2>&1; then
-    log error "git is not installed. Please install git."
-    exit 1
-fi
+check_git_installed() {
+    if ! command -v git >/dev/null 2>&1; then
+        log error "git is not installed. Please install git."
+        exit 1
+    fi
+}
 
 # Check if gh is installed
-if ! command -v gh >/dev/null 2>&1; then
-    log error "gh is not installed. Please install gh."
-    exit 1
-fi
+check_gh_installed() {
+    if ! command -v gh >/dev/null 2>&1; then
+        log error "gh is not installed. Please install gh."
+        exit 1
+    fi
+}
 
 # Check if gh is authenticated
-if ! gh auth status >/dev/null 2>&1; then
-    log info "gh is not authenticated. Authenticating..."
-    gh auth login
-fi
+check_gh_authenticated() {
+    if ! gh auth status >/dev/null 2>&1; then
+        log info "gh is not authenticated. Authenticating..."
+        gh auth login
+    fi
+}
 
 # Setup git with gh
-gh auth setup-git
+setup_git_with_gh() {
+    gh auth setup-git
+}
 
 # Clone the repository
-TEMP_DIR=$(mktemp -d)
-log info "Cloning repository..."
-git clone "$REPO_URL" "$TEMP_DIR"
+clone_repository() {
+    local repo_url=$1
+    local temp_dir=$(mktemp -d)
+
+    log info "Cloning repository..."
+    git clone "$repo_url" "$temp_dir"
+
+    CLONE_DIR=$temp_dir
+}
 
 # Upload file/folder as gist
-log info "Uploading file/folder as gist..."
-GIST_OUTPUT=$(gh gist create "$TEMP_DIR/$FILE_OR_FOLDER_PATH")
+upload_as_gist() {
+    local clone_dir=$1
+    local file_or_folder_path=$2
 
-# Extract the Gist ID from the output
-GIST_ID=$(echo "$GIST_OUTPUT" | grep -oP '(?<=Gist created: ).*')
+    log info "Uploading file/folder as gist..."
+    local gist_output=$(gh gist create "$clone_dir/$file_or_folder_path")
 
-# Function to recursively list files with RAW URLs
+    # Extract the Gist ID from the output
+    GIST_ID=$(echo "$gist_output" | grep -oP '(?<=Gist created: ).*')
+}
+
 # Function to recursively list files with RAW URLs
 list_files() {
-    local directory="$1"
-    local indent="$2"
+    local gist_id=$1
+    local directory="$2"
+    local indent="$3"
 
     cd "$directory"
 
@@ -150,11 +142,11 @@ list_files() {
             folder_emojis=("📁" "📂" "🗂")
             folder_emoji=${folder_emojis[RANDOM % ${#folder_emojis[@]}]}
             log info "${indent}${folder_emoji} $file"
-            list_files "$file" "$indent  "
+            list_files "$gist_id" "$file" "$indent  "
         else
             file_emojis=("📃" "📝" "📑" "📄")
             file_emoji=${file_emojis[RANDOM % ${#file_emojis[@]}]}
-            file_url=$(gh gist view "$GIST_ID" -R | grep "$file" | awk '{print $NF}')
+            file_url=$(gh gist view "$gist_id" -R | grep "$file" | awk '{print $NF}')
             log info "${indent}${file_emoji} $file_url"
         fi
     done
@@ -162,15 +154,45 @@ list_files() {
     cd ..
 }
 
+# ========= MAIN ========== #  
+
+# Check and parse input string
+if [[ $# -eq 1 ]]; then
+    parse_input_string "$1"
+else
+    log error "Invalid number of arguments. Please provide a single input string."
+    exit 1
+fi
+
+# Check if git is installed
+check_git_installed
+
+# Check if gh is installed
+check_gh_installed
+
+# Check if gh is authenticated
+check_gh_authenticated
+
+# Setup git with gh
+setup_git_with_gh
+
+# Clone the repository
+clone_repository "$REPO_URL"
+
+# Upload file/folder as gist
+upload_as_gist "$CLONE_DIR" "$FILE_OR_FOLDER_PATH"
+
+# Print link to the secret Gist
+log info "Link to the secret Gist: $GIST_ID"
+
 # Print hierarchical list of files with RAW URLs
 log info "Hierarchical list of files in the Gist:"
 
-list_files "$TEMP_DIR" ""
+list_files "$GIST_ID" "$CLONE_DIR" ""
 
 # Clean up
 log info "Cleaning up..."
-rm -rf "$TEMP_DIR"
+rm -rf "$CLONE_DIR"
 
 # Print author's GitHub handle
 log info "Author's GitHub handle: ${Magenta}@zudsniper${Color_Off}"
-
