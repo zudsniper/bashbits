@@ -1,11 +1,14 @@
 #!/bin/bash
 # to_gist.sh
 # ----------
+# v0.2.0
 # 
 # Simple script to upload a secret gist of a private repository subfile or 
 # subdirectory that the authenticated user has access to.  
 # 
 # @zudsniper
+
+#!/bin/bash
 
 # ANSI color schema
 ANSI_COLORS_FILE="$HOME/.ansi_colors.sh"
@@ -129,7 +132,40 @@ git clone "$REPO_URL" "$TEMP_DIR"
 
 # Upload file/folder as gist
 log info "Uploading file/folder as gist..."
-gh gist create "$TEMP_DIR/$FILE_OR_FOLDER_PATH"
+GIST_OUTPUT=$(gh gist create "$TEMP_DIR/$FILE_OR_FOLDER_PATH")
+
+# Extract the Gist ID from the output
+GIST_ID=$(echo "$GIST_OUTPUT" | grep -oP '(?<=Gist created: ).*')
+
+# Function to recursively list files with RAW URLs
+# Function to recursively list files with RAW URLs
+list_files() {
+    local directory="$1"
+    local indent="$2"
+
+    cd "$directory"
+
+    for file in *; do
+        if [[ -d $file ]]; then
+            folder_emojis=("📁" "📂" "🗂")
+            folder_emoji=${folder_emojis[RANDOM % ${#folder_emojis[@]}]}
+            log info "${indent}${folder_emoji} $file"
+            list_files "$file" "$indent  "
+        else
+            file_emojis=("📃" "📝" "📑" "📄")
+            file_emoji=${file_emojis[RANDOM % ${#file_emojis[@]}]}
+            file_url=$(gh gist view "$GIST_ID" -R | grep "$file" | awk '{print $NF}')
+            log info "${indent}${file_emoji} $file_url"
+        fi
+    done
+
+    cd ..
+}
+
+# Print hierarchical list of files with RAW URLs
+log info "Hierarchical list of files in the Gist:"
+
+list_files "$TEMP_DIR" ""
 
 # Clean up
 log info "Cleaning up..."
@@ -137,3 +173,4 @@ rm -rf "$TEMP_DIR"
 
 # Print author's GitHub handle
 log info "Author's GitHub handle: ${Magenta}@zudsniper${Color_Off}"
+
