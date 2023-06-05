@@ -1,7 +1,7 @@
 #!/bin/bash
 # to_gist.sh
 # ----------
-# v0.3.2
+# v0.3.3
 # 
 # Simple script to upload a secret gist of a private repository subfile or 
 # subdirectory that the authenticated user has access to.  
@@ -87,6 +87,14 @@ check_git_installed() {
 check_gh_installed() {
     if ! command -v gh >/dev/null 2>&1; then
         log error "gh is not installed. Please install gh."
+        exit 1
+    fi
+}
+
+# Check if gh is installed
+check_installed() {
+    if ! command -v "$1" >/dev/null 2>&1; then
+        log error "$1 is not installed. Please install $1."
         exit 1
     fi
 }
@@ -177,10 +185,13 @@ else
 fi
 
 # Check if git is installed
-check_git_installed
+check_installed "git"
 
 # Check if gh is installed
-check_gh_installed
+check_installed "gh"
+
+# jq
+check_installed "jq"
 
 # Check if gh is authenticated
 check_gh_authenticated
