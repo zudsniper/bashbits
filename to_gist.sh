@@ -1,14 +1,12 @@
 #!/bin/bash
 # to_gist.sh
 # ----------
-# v0.3.1
+# v0.3.2
 # 
 # Simple script to upload a secret gist of a private repository subfile or 
 # subdirectory that the authenticated user has access to.  
 # 
 # @zudsniper
-
-#!/bin/bash
 
 # ANSI color schema
 ANSI_COLORS_FILE="$HOME/.ansi_colors.sh"
@@ -129,6 +127,16 @@ upload_as_gist() {
     GIST_ID=$(echo "$gist_output" | grep -oP '(?<=Gist created: ).*')
 }
 
+# Function to get RAW URL of a file from Gist JSON
+get_raw_url() {
+    local gist_json=$1
+    local file_name=$2
+    local raw_url
+
+    raw_url=$(echo "$gist_json" | jq -r '.files."'"$file_name"'"."raw_url"')
+    echo "$raw_url"
+}
+
 # Function to recursively list files with RAW URLs
 list_files() {
     local gist_id=$1
@@ -136,6 +144,9 @@ list_files() {
     local indent="$3"
 
     cd "$directory"
+
+    local gist_json
+    gist_json=$(gh gist view "$gist_id" --json)
 
     for file in *; do
         if [[ -d $file ]]; then
@@ -146,13 +157,14 @@ list_files() {
         else
             file_emojis=("📃" "📝" "📑" "📄")
             file_emoji=${file_emojis[RANDOM % ${#file_emojis[@]}]}
-            file_url=$(gh gist view "$gist_id" -R | grep "$file" | awk '{print $NF}')
-            log info "${indent}${file_emoji} $file_url"
+            raw_url=$(get_raw_url "$gist_json" "$file")
+            log info "${indent}${file_emoji} $raw_url"
         fi
     done
 
     cd ..
 }
+
 
 # ========= MAIN ========== #  
 
