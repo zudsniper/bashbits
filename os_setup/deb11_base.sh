@@ -1,4 +1,13 @@
 #!/bin/bash
+# deb11_base.sh
+# -------------
+# 
+# Installer / configuration for Debian 11 Bullseye... Wait isn't that what deb11_nonfree.sh does? 
+# Yes! 
+# this is the older one, but it still may be useful. 
+# 
+# @zudsniper
+
 set -e
 # ================================================================================ #
 #     __          __         _     _           __                                 
@@ -49,11 +58,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 # ============ ANSI u cant see ============= # 
-rm -f ansi_colors.sh
-curl -sL https://gist.githubusercontent.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59/raw/ansi_colors.sh -o ansi_colors.sh
-source ansi_colors.sh
+source ~/.ansi_colors.sh || curl -sSL https://raw.githubusercontent.com/zudsniper/bashbits/master/.ansi_colors.sh -o ~/.ansi_colors.sh && source ~/.ansi_colors.sh
 # ============ update packages ============ #
-apt-get update && apt-get -y upgrade
+apt-get update -y && apt-get upgrade -y
 # ========== NETWORK SAFETY  =========== #
 # disable `root` from ssh connection directly with server
 sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
