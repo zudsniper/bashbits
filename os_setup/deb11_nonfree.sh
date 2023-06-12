@@ -94,7 +94,7 @@ while (( "$#" )); do
 done
 
 # Check for and install necessary packages
-REQUIRED_PACKAGES=("curl" "git" "gh" "jq" "certbot" "nginx" "ufw" "net-tools" "snap" "btop" "tmux" "vim" "build-essential" "tree" "zip" "unzip" "terminator" "vim" "openssh" "letsencrypt" "python3" "python-is-python3" "pipx" )
+REQUIRED_PACKAGES=("curl" "git" "gh" "jq" "certbot" "nginx" "ufw" "net-tools" "snapd" "btop" "tmux" "vim" "build-essential" "tree" "zip" "unzip" "terminator" "vim" "openssh" "letsencrypt" "python3" "python-is-python3" "pipx" )
 for pkg in "${REQUIRED_PACKAGES[@]}"; do
     if ! command -v $pkg &> /dev/null; then
         log 3 "$pkg not found, attempting to install..."
