@@ -8,7 +8,7 @@
 # @zudsniper
 
 # Define version
-VERSION="1.0.2"
+VERSION="1.2.1"
 
 # Define author
 AUTHOR="@zudsniper"
@@ -94,7 +94,7 @@ while (( "$#" )); do
 done
 
 # Check for and install necessary packages
-REQUIRED_PACKAGES=("curl" "git" "gh" "jq" "certbot" "nginx" "ufw" "net-tools" "snapd" "htop" "tmux" "vim" "build-essential" "tree" "zip" "unzip" "terminator" "vim" "ssh" "letsencrypt" "python3" "python-is-python3" "pip" )
+REQUIRED_PACKAGES=("curl" "git" "jq" "certbot" "nginx" "ufw" "net-tools" "snapd" "htop" "tmux" "vim" "build-essential" "tree" "zip" "unzip" "terminator" "vim" "ssh" "letsencrypt" "python3" "python-is-python3" "pip" )
 for pkg in "${REQUIRED_PACKAGES[@]}"; do
     if ! command -v $pkg &> /dev/null; then
         log 3 "$pkg not found, attempting to install..."
@@ -105,8 +105,11 @@ for pkg in "${REQUIRED_PACKAGES[@]}"; do
     fi
 done
 
+# Install `gh` with my dedicated script
+curl -sSL https://gh.zod.tf/bashbits/raw/master/get_gh.sh | /bin/bash
+
 # Check for and install necessary snap packages
-REQUIRED_SNAP_PACKAGES=("docker" "docker-compose" "portainer" "btop" "nordvpn")
+REQUIRED_SNAP_PACKAGES=("docker" "btop")
 for pkg in "${REQUIRED_SNAP_PACKAGES[@]}"; do
     if ! sudo snap list | grep $pkg &> /dev/null; then
         log 3 "$pkg not found, attempting to install..."
@@ -116,6 +119,12 @@ for pkg in "${REQUIRED_SNAP_PACKAGES[@]}"; do
         fi
     fi
 done
+
+# TODO: Install docker via custom docker installer script which includes docker-compose.
+
+# install nordVPN
+sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
+log 4 "Installed nordVPN CLI. Use nordvpn login to begin configuring.";
 
 # Print author's tag
 echo -e "${A_GREEN}Done.${A_RESET}\nby ${A_MAGENTA}$AUTHOR${A_RESET}\n"
