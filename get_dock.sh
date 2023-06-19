@@ -7,7 +7,7 @@
 #
 # @zudsniper
 
-VERSION="1.2.1"
+VERSION="1.2.2"
 
 #############################################
 # DOCKER INSTALLATION 
@@ -114,7 +114,7 @@ shift $((OPTIND -1))
 
 # print larry3d figfont saying "get_dock.sh"
 #   using heredoc
-cat << EOF
+cat << 'EOF'
               __                __                  __                   __         
              /\ \__            /\ \                /\ \                 /\ \        
    __      __\ \ ,_\           \_\ \    ___     ___\ \ \/'\         ____\ \ \___    
