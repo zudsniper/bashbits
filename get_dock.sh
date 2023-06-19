@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 # get_dock.sh
 # -----------
 # 
@@ -7,7 +7,7 @@
 #
 # @zudsniper
 
-local VERSION="1.1.0"
+local VERSION="1.1.1"
 
 #############################################
 # DOCKER INSTALLATION 
