@@ -7,7 +7,7 @@
 #
 # @zudsniper
 
-local VERSION="1.0.1"
+local VERSION="1.1.0"
 
 #############################################
 # DOCKER INSTALLATION 
@@ -31,6 +31,9 @@ LOG_LEVEL="info"
 function log() {
     local LEVEL_NUM=${LOG_LEVELS[$1]}
     shift
+    if [[ ! -v LOG_LEVELS[$LOG_LEVEL] ]]; then
+        LOG_LEVEL="info"
+    fi
     if [ ${LOG_LEVELS[$LOG_LEVEL]} -ge $LEVEL_NUM ]; then
         echo -e "${@}"
     fi
@@ -69,43 +72,44 @@ function install_dock() {
     sudo sh get-docker.sh
 }
 
-# TODO: I guess we're not supporting long names...
 # Parse CLI flags
-while getopts "hVvdl:f" opt; do
-    case ${opt} in
-        h )
+TEMP=$(getopt -o hVvdl:f --long help,version,verbose,debug,log_level:,force -n 'get_dock.sh' -- "$@")
+eval set -- "$TEMP"
+
+while true ; do
+    case "$1" in
+        -h|--help)
             echo "Usage:"
-            echo "    -h          Display help"
-            echo "    -V          Display version"
-            echo "    -v          Set log level to verbose"
-            echo "    -d          Set log level to debug"
-            echo "    -l LEVEL    Set log level, accepts values or integers (7=silly, 0=critical)"
-            echo "    -f          Force reinstallation of Docker"
-            exit 0
-            ;;
-        V )
+            echo "    --help, -h          Display help"
+            echo "    --version, -V       Display version"
+            echo "    --verbose, -v       Set log level to verbose"
+            echo "    --debug, -d         Set log level to debug"
+            echo "    --log_level, -l     Set log level, accepts values or integers (7=silly, 0=critical)"
+            echo "    --force, -f         Force reinstallation of Docker"
+            shift ;;
+        -V|--version)
             VERSION=${VERSION:-"None"}
             echo "Version: $VERSION"
-            exit 0
-            ;;
-        v )
+            shift ;;
+        -v|--verbose)
             LOG_LEVEL="verbose"
-            ;;
-        d )
+            shift ;;
+        -d|--debug)
             LOG_LEVEL="debug"
-            ;;
-        l )
-            LOG_LEVEL=${OPTARG}
-            ;;
-        f )
+            shift ;;
+        -l|--log_level)
+            LOG_LEVEL=$2
+            shift 2 ;;
+        -f|--force)
             FORCE_REINSTALL=true
-            ;;
-        \? )
-            echo "Invalid Option: -$OPTARG" 1>&2
-            exit 1
-            ;;
+            shift ;;
+        --)
+            shift ; break ;;
+        *)
+            echo "Internal error!" ; exit 1 ;;
     esac
 done
+
 shift $((OPTIND -1))
 
 # print intro figfont 
