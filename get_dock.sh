@@ -7,7 +7,7 @@
 #
 # @zudsniper
 
-VERSION="1.2.2"
+VERSION="1.2.3"
 
 #############################################
 # DOCKER INSTALLATION 
@@ -34,7 +34,7 @@ function log() {
     if [[ ! -v LOG_LEVELS[$LOG_LEVEL] ]]; then
         LOG_LEVEL="info"
     fi
-    if [ ${LOG_LEVELS[$LOG_LEVEL]} -ge $LEVEL_NUM ]; then
+    if [[ ${LOG_LEVELS[$LOG_LEVEL]} -ge $LEVEL_NUM ]]; then
         echo -e "${@}"
     fi
 }
