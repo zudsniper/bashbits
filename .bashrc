@@ -1,4 +1,19 @@
 # zod's ~/.bashrc 
+# ---------------
+# 
+# V4.2.0
+# This includes debian base-scripts, and should probably have those removed
+# also a lot of other shit i dont want to describe rn
+# - Automation for TF2Autobot
+# - ANSI color system & autoinstaller
+# - colored bash prompts
+# - naming xterm instances
+# - stop processes by port (dispatchPort())
+# - add and remove from $PATH variable
+# some other shit probably
+#
+# @zudsniper 
+# ---------------
 #   executed by bash(1) for non-login shells. & fools. 
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -148,10 +163,10 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 	export opersys="mac"
 elif [[ "$OSTYPE" == "cygwin" ]]; then
         # POSIX compatibility layer and Linux environment emulation for Windows
-	export opersys="win-gitbash"
+	export opersys="linux"
 elif [[ "$OSTYPE" == "msys" ]]; then
         # Lightweight shell and GNU utilities compiled for Windows (part of MinGW)
-	export opersys="win-msys"
+	export opersys="linux"
 elif [[ "$OSTYPE" == "win32" ]]; then
         # I'm not sure this can happen.
 	export opersys="win32"
@@ -296,8 +311,6 @@ findLargestNFiles() {
 #     find and kill process
 #           by PORT
 
-
-
 # Lighter version of the following -- only handles a single argument and expects it to be provided. 
 kPort() {
 	echo -ne "${A_PURPLE}${A_BOLD}netstat'in${A_RESET}...\n";
@@ -359,7 +372,7 @@ git_int_install() {
 	# from my gists!
 	# date 02/02/2023
 	# ================================================= # 
-	sudo curl -L https://gist.githubusercontent.com/zudsniper/0ba53973f9e3fe6222ffd1763bc80055/raw/get_gh.sh | bash;
+	curl -L https://gist.githubusercontent.com/zudsniper/0ba53973f9e3fe6222ffd1763bc80055/raw/get_gh.sh | /bin/bash;
     	#yes | sudo apt upgrade --allow-unauthenticated;
     	#yes | sudo apt install gh --allow-unauthenticated; 
 	# ================================================= # 
@@ -394,75 +407,48 @@ if [[ -z "$#" ]]; then
 fi
 
 # add all files in current working directory
-git add .;
+git add .
 
 # commit with provided message 
-git commit -m "$#";
+git commit -m "$#"
+
+# make sure the branch is called master
+# git branch -M master
 
 # push 
-git push;
+git push -u origin master;
 
 }
 
 # ----------------------------- #
-#         AUTO-UPDATING
-# (pushing updates IF gh auth user = zudsniper)
+#     (debian / ubuntu) 
+#      AUTO-UPDATE APT
+#
 
-updateGistInfo() {
-
-# Check if the local version of the file exists
-if [ ! -f "$2" ]; then
-  echo "Error: Local file does not exist"
-  exit 1
-fi
-
-# Download the latest version of the file from the URL
-curl -L "$1" -o "temp.txt"
-
-# Compare the local version to the downloaded version
-if ! cmp -s "$2" "temp.txt"; then
-  # Save the local version to a temporary file
-  cp "$2" "$2.bak"
-  # Overwrite the local version with the newer version
-  mv "temp.txt" "$2"
-  # Print a red alert message
-  echo -e "\033[0;31mA newer version of your gist has been downloaded: $2\033[0m"
-else
-  # If the local version is the same as the online version, delete the temporary file
-  rm "temp.txt"
-fi
-
-}
-# THIS IS NO LONGER A GIST SO THIS DOESN'T WORK
-updateMyself() {
-	return
-	me=`basename "$0"`;
-	export dirr=$(pwd);
-	cd "$(dirname "$0")";
-	gh gist edit https://gist.github.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59 -f "${me}" .bashrc;
-	echo -ne "${A_LGREEN}${A_INVERSE}${A_BOLD}Updated live gist!${A_RESET}\n\n";
-	cd "${dirr}"; 
+function autoupdate_apt() {
+	# Update and upgrade Ubuntu packages
+	sudo apt update && sudo apt upgrade -y
 }
 
+# this will install/update kurtosis client. 
+#    REQUIRES docker
+#    REQUIRES debian/ubuntu Linux
+function autoupdate_kurtosis() {
+	if [ -x "$(command -v kurtosis)" ]; then
+		# Install Kurtosis CLI
+		echo "deb [trusted=yes] https://apt.fury.io/kurtosis-tech/ /" | sudo tee /etc/apt/sources.list.d/kurtosis.list
+		sudo apt update
+		sudo apt install kurtosis-cli
+	fi
+}
 
-# THIS IS NO LONGER A GIST SO THIS DOESN'T WORK
-
-# update myself if out of date & push is not selected
-#if [[ $1 -ne gpush ]]; then
-#    updateGistInfo https://gist.github.com/zudsniper/e5bbdb7d3384a2b5f76277b52d103e59 .bashrc
-#fi
-
-# THIS IS NO LONGER A GIST SO THIS DOESN'T WORK
-
-#if [[ $# -eq 0 ]]; then
-	# do nothing
-	# echo -ne "${A_BOLD}Hi! ${A_RESET} i'm zudsniper.\n\n"
-#	no=1
-#elif [[ $1 -eq gpush ]]; then
-#	updateMyself
-#fi
-
-# REMOVED SHITTY INSTALL SCRIPT FOR NVM, USE get_nvm ALIAS
+## actual "auto-update" calls go here
+if [[ ${opersys} == "linux" ]]; then
+	autoupdate_apt
+	autoupdate_kurtosis
+elif [[ ${opersys} == "mac" ]]; then
+	brew update
+fi
 
 # ----------------------------- #
 #          nvm related
@@ -473,6 +459,8 @@ if [ "$(ls -A "$HOME/.nvm")" ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
+
+
 
 # ===================== #
 #        *~end~*
