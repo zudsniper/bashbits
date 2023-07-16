@@ -1,7 +1,7 @@
 # zod's ~/.bashrc 
 # ---------------
 # 
-# V4.2.0
+# V4.2.1
 # This includes debian base-scripts, and should probably have those removed
 # also a lot of other shit i dont want to describe rn
 # - Automation for TF2Autobot
@@ -442,13 +442,15 @@ function autoupdate_kurtosis() {
 	fi
 }
 
-## actual "auto-update" calls go here
-if [[ ${opersys} == "linux" ]]; then
-	autoupdate_apt
-	autoupdate_kurtosis
-elif [[ ${opersys} == "mac" ]]; then
-	brew update
-fi
+function update_all {
+	## actual "auto-update" calls go here
+	if [[ ${opersys} == "linux" ]]; then
+		autoupdate_apt
+		autoupdate_kurtosis
+	elif [[ ${opersys} == "mac" ]]; then
+		brew update
+	fi
+}
 
 # ----------------------------- #
 #          nvm related
