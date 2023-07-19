@@ -1,17 +1,23 @@
-# `bashbits` $v(\frac{0}{0})$
+# `bashbits` $v(\frac{0}{0})$ $+$ $n$
 > _a loose-leaf binder of my assorted scripts which I like being able to access via github._  
 > ### Now all in the same place!   
   
 ### by [@zudsniper](https://github.com/zudsniper)  
 
+## LINKS 
+[`bashrc.zod.tf`](https://bashrc.zod.tf/)  
+_a direct link to my `~/.bashrc` file<sub>(always a work in progress)</sub>_
+
 ## VERSIONING  
 The versions for these are pretty asynchronous, and certainly NOT AT ALL kept track of. YMMV.  
-### _`v2.0.1`_
+### 💘 _`v3.0.0`_
+
+<a href="https://zod.tf/"><img src="https://github.com/zudsniper/bashbits/assets/16076573/1f6a7bc0-daa9-401b-be05-693bf6357845" alt="second zod.tf logo" width="150rem" style="max-width: 100%;"></a>
 
 --- 
 
 ## FILES
-
+<sup> _(i know this is very out of date i have the laziness)_ </sup>
 > ```
 > 📁 anim_cli ✨  
 >    📄 intro-fs.sh  
@@ -50,6 +56,6 @@ This code is all **MIT Licensed**.
 
 > _fullstack development, server administration, web design, branding creation, musical composition & performance, video editing, and more probably_   
 
-<a href="https://zod.tf/"><img src="https://user-images.githubusercontent.com/16076573/222953031-03f44756-03bf-46b9-b66e-98d50dc013fc.png" alt="second zod.tf logo" width="150rem" style="max-width: 100%;"></a>
+<a href="https://zod.tf/"><img src="https://github.com/zudsniper/bashbits/assets/16076573/1f6a7bc0-daa9-401b-be05-693bf6357845" alt="second zod.tf logo" width="150rem" style="max-width: 100%;"></a>
 
 
