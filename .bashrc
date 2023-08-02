@@ -1,19 +1,40 @@
-# zod's ~/.bashrc 
-# ---------------
+# zod's ~/.bashrc (why isn't there a shebang here? lol)
+# v4.3.0
+# --------------- #
+# #     TODO
+# --------------- # 
+# _make sure to check for `TODO` within the text of this file if you are updating it, in case something isn't listed here._  
+# - add self-updating (at least version checks and warnings of outdateness)
+# - add smart-merging text files
+# - clean up the first lines of this script, taken from a Bullseye 11.6 Debian installation arbitrarily. Assess value & necessity. 
+# - standardize function header comments -- simply document more of the functionality of each addition
+# - add a Glossary to elucidate the additions of this script and how to get started with it.  
+# - [MAJOR] create a `~/.zshrc` much like this file, but for (mostly MacOS) `~/.zshrc` users
+# --------------- #  
+# #   CHANGELOG
+# --------------- # 
+# ## `v4.3.0``
+# Gonna start keeping an update log here until it gets too long
+# - Adding `rmerge` alias for merging with rsync (check alias definition for source attribution)
+# - Updating the strategy information in this long comment header
+# - Added explanation of functionality of self-updater
+# - Updating a lot of function headers
+# - Adding TODO items throughout the file
+# - Adding TODO section in this header  
+# - Better differentiated between default debian ~/.bashrc and my own work 
 # 
-# V4.2.1
-# This includes debian base-scripts, and should probably have those removed
-# also a lot of other shit i dont want to describe rn
-# - Automation for TF2Autobot
-# - ANSI color system & autoinstaller
-# - colored bash prompts
-# - naming xterm instances
-# - stop processes by port (dispatchPort())
-# - add and remove from $PATH variable
-# some other shit probably
-#
+# ## `v4.2.1`
+# (this is the version before adding this changelog, but you can check the github commits to see)
+# 
+# ---  
+# 
 # @zudsniper 
-# ---------------
+# --------------- 
+
+#################################################################
+# FROM DEBIAN BULLSEYE 11.6 DEFAULT ~/.bashrc
+#################################################################
+
 #   executed by bash(1) for non-login shells. & fools. 
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -51,6 +72,11 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+#################################################################
+# this bit is written by @zudsniper, but is just a short snippet that must be here for color reasons. 
+#     After the next delimiter bar (like the one above & below this text), we return to the base ~/.bashrc as described earlier.
+#################################################################
+
 # ----------------------------- #
 ## ANSI COLOR ENVIRONMENT VARS
 
@@ -63,6 +89,10 @@ fi
 # source the colors
 . "$HOME/.ansi_colors.sh"
 # ----------------------------- #
+
+#################################################################
+# FROM DEBIAN BULLSEYE 11.6 DEFAULT ~/.bashrc
+#################################################################
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -143,18 +173,23 @@ alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -l'
 alias l='ls $LS_OPTIONS -lA'
 
-# &========================================& # 
 
-# ===================== #
-#     linux configs
-# ===================== #
-# by @zudsniper 
-# (or zod#1626)
-# ------------- #
+
+#################################################################
+#                    __       __               __             
+#   ____  ____  ____/ /____  / /_  ____ ______/ /_  __________
+#  /_  / / __ \/ __  / ___/ / __ \/ __ `/ ___/ __ \/ ___/ ___/
+#   / /_/ /_/ / /_/ (__  ) / /_/ / /_/ (__  ) / / / /  / /__  
+#  /___/\____/\__,_/____(_)_.___/\__,_/____/_/ /_/_/   \___/  
+# 
+#################################################################
+# /bin/bash configs by @zudsniper, or "zod"
+# 
 # available at https://bashrc.zod.tf
 
 # ----------------------------- #
-# check OS
+# check executing operating system of this bash instance
+# TODO: This script needs an update to handle WSL2 better as well as other virtualized environments like docker containers 
 checkOS() {
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         export opersys="linux"
@@ -179,6 +214,7 @@ else
 fi
 }
 
+# TODO: Not sure this is necessary, but it may be
 ## _______ OS DETERMINED _______ ##
 # "${opersys}"
 checkOS;
@@ -307,11 +343,19 @@ findLargestNFiles() {
         exit 0;
 }
 
+# Merge two folders intelligently using rsync, of format `rmerge src/ dest/`  
+# source: https://superuser.com/questions/547282/which-is-the-rsync-command-to-smartly-merge-two-folders
+# NOTE -- this will override any previous backup created via the -b option 
+alias rmerge="rsync -abviuzP"
+
 # ----------------------------- #
 #     find and kill process
 #           by PORT
 
-# Lighter version of the following -- only handles a single argument and expects it to be provided. 
+# Kills the process which is detected as running on the provided port
+# @param $1 the port in question
+# 
+# NOTE -- Internal/Lighter version of dispatchPort() -- only handles a single argument and expects it to be provided. 
 kPort() {
 	echo -ne "${A_PURPLE}${A_BOLD}netstat'in${A_RESET}...\n";
 	sudo netstat -tulpn | grep ':${1}}';
@@ -319,6 +363,9 @@ kPort() {
 	echo -ne "${A_YELLOW}${A_INVERSE}REMOVING PROCESS ON${A_RESET} + '$1'\n"
 	sudo fuser -k "$1";
 }
+
+# Kills the process which is detected as running on the provided port
+# @param $1 the port in question
 
 dispatchPort() {
 	if [ $# -eq 0 ]; then
@@ -335,19 +382,33 @@ dispatchPort() {
 
 }
 
-# ----------------------------- #
+# ----------------------------- # 
 #         my installers
+# 
+# TODO: add these installers 
+#    	- docker
+# 		- docker-compose 
+#       (utilize my `get_dock.sh` script **for debian based Linux**): https://gist.github.com/zudsniper/d79549fef48daeef1749757a850d12a6
+# 		- docker-engine 
+# 		
+
 alias get_gh="curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_gh.sh | /bin/bash";
 alias get_nvm="curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_nvm.sh | /bin/bash";
+
+
 
 # ----------------------------- #
 #        set shell title
 
-# xterm title funcs
+# Set the title of your current terminal window to the provided string 
+# @param $1 the title text you want to set 
+#
+# TODO: Add a check for a parameter, as it is required here... kinda? choose if it is. 
 settitle() {
                 export PS1="\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n$ "
                 echo -ne "\e]0;$1\a"
 }
+# Set the title of your current terminal window to the current path or working directory of executing user.
 settitlepath() {
         export PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[33m\]\w\[\e[0m\]\n$ "
 }
@@ -355,51 +416,14 @@ settitlepath() {
 # ----------------------------- #
 #     git convenience funcs
 
-# INTERNAL FUNCTION to install gh correctly based on installed platforms' OS
-git_int_install() {
-   checkOS;
-   echo -ne "${A_CYAN}${A_INVERSE}operating system: ${opersys}${A_RESET}\n";
-
-	
-    if [[ ${opersys} == "mac" ]]; then
-	brew install gh;
-	gh auth login;
-	return;
-    fi
-   
-    if [[ ${opersys} == "linux" ]]; then
-	
-	# from my gists!
-	# date 02/02/2023
-	# ================================================= # 
-	curl -L https://gist.githubusercontent.com/zudsniper/0ba53973f9e3fe6222ffd1763bc80055/raw/get_gh.sh | /bin/bash;
-    	#yes | sudo apt upgrade --allow-unauthenticated;
-    	#yes | sudo apt install gh --allow-unauthenticated; 
-	# ================================================= # 
-    fi
-}
-
-# avoid having to remember to install gh
-# i am lazy
-git_auth() {
-    checkOS;
-	if ! command -v gh >/dev/null 2>&1; then
-    		# echo "Install gh first"
-    		# installing gh...
-		git_int_install;
-	fi
-	
-	if ! gh auth status >/dev/null 2>&1; then
-    	    # echo "You need to login: gh auth login"
-	    # prompting user for gh authorization
-	    gh auth login;
-	fi
-	
-}
-
+## REMOVED function git_int_install & git_auth
+## > USELESS & BROKEN
 
 # adds all files in current dir to staged changes, commits with the message @params, and pushes the resulting commit 
 # to the current branch upstream.
+# @param $* all used as the argument passed to `git commit -k {your_parameters_go_here}`
+# 
+# TODO: add some actual status printing in here sheesh
 git_acpush() {
 
 if [[ -z "$#" ]]; then
@@ -412,6 +436,7 @@ git add .
 # commit with provided message 
 git commit -m "$#"
 
+# TODO: support 'main' or some other branch name if this function is called with an option -b|--branch <branch> as a set of 2 parameters which directly follow one another. 
 # make sure the branch is called master
 # git branch -M master
 
@@ -421,15 +446,19 @@ git push -u origin master;
 }
 
 # ----------------------------- #
-#     (debian / ubuntu) 
-#      AUTO-UPDATE APT
-#
+#      AUTO-UPDATE APT, Kurtosis, Brew
+#     (debian / ubuntu) & (mac)
 
+# updates & upgrades aptitude packages 
+#    - changed to use apt-get alias because... idk linux is weird
 function autoupdate_apt() {
 	# Update and upgrade Ubuntu packages
-	sudo apt update && sudo apt upgrade -y
+	sudo apt-get update -y && sudo apt-get upgrade -y
 }
 
+# Install `kurtosis`, an environment manager by `https://github.com/kurtosis-tech` which I respect
+# 	- An enclave-based approach to isolation / imaging
+# 
 # this will install/update kurtosis client. 
 #    REQUIRES docker
 #    REQUIRES debian/ubuntu Linux
@@ -442,8 +471,10 @@ function autoupdate_kurtosis() {
 	fi
 }
 
+# A function to aggregate other installer functions and call the appropriate functions based on operating system. 
+# 
+# NOTE -- if you want automatic updates on ~/.bashrc source (every time you open a terminal) then add `update_all` to this file below this definition
 function update_all {
-	## actual "auto-update" calls go here
 	if [[ ${opersys} == "linux" ]]; then
 		autoupdate_apt
 		autoupdate_kurtosis
@@ -453,7 +484,19 @@ function update_all {
 }
 
 # ----------------------------- #
-#          nvm related
+#         self-updates 
+
+# TODO: ADD THIS FEATURE
+# 		1. Check the version of this file via the new convention of keeping the current version number on the second line of every script file, 
+# 			always proceeded by a 'v' or 'V' and followed immediately with the version information. 
+#       2. Check the version of the file available at the upstream, "https://gh.zod.tf/bashbits/raw/master/.bashrc/"
+# 		3. If LOCAL_VERSION < CURRENT_VERSION, show an appropriately colored message which explains that your version is outdated,
+# 			 as well as showing both versions, local & current (local version in grey & italic if the minor versions is the same as the web file (current) version; in yellow if its within 1 minor version of the web upstream, in bold yellow if it is within 3 minor versions of web, and red if the difference is greater than 3 minor versions.)
+#            also print the number of versions behind (in the most meaningful terms: for instance, if you are 4 major versions old, then this should be stated: but if you are 1 minor version old, that should be printed. Both ignore the patch value, which should only be shown if major & minor are updated to the latest.)
+
+
+# ----------------------------- #
+#          nvm sourcing
 
 # if nvm dir is not empty, source nvm 
 if [ "$(ls -A "$HOME/.nvm")" ]; then
@@ -461,11 +504,11 @@ if [ "$(ls -A "$HOME/.nvm")" ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
-
+# 98% chance this ^^^^ will be added again to the file by something. Even my script for installing nvm does it lmao 
 
 
 # ===================== #
 #        *~end~*
 # ===================== #
 
-no=0
+no=0 # this used to be necessary, but now i'm just leaving it
