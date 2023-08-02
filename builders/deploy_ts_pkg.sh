@@ -1,5 +1,5 @@
 #!/bin/bash
-# deploy_pkg.sh
+# deploy_pkg.sh v1.0.0
 # -------------
 # 
 # Deploy a nodeJS TypeScript package to 1. aptitude and/or 2. homebrew. 

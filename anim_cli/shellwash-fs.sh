@@ -1,10 +1,11 @@
 #!/bin/bash
-# shellwash-fs.sh 
+# shellwash-fs.sh v1.0.0
 # ---------------
-# by @zudsniper
-# > 04/29/2023
+# Created 04/29/2023
 # 
 # SCUFFED WASH OF SCREEN (dirty!)
+# 
+# @zudsniper
 
 cli_animation() {
   local wave_chars=("." "o" "O" "@" "*" "🌊" "🧼" "💧" "🚿" "🧺" "🐳")

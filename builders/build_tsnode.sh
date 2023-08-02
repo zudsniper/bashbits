@@ -1,5 +1,5 @@
 #!/bin/bash
-# build_tsnode.sh
+# build_tsnode.sh v1.0.0
 # ---------------
 # 
 # Take your current typescript + nodejs project and complete the construction of a git repository and key files. 

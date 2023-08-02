@@ -1,5 +1,5 @@
 #!/bin/bash
-# activenv.sh
+# activenv.sh v1.0.0
 # -----------
 # 
 # initialize and active the python virtual environment specified as a parameter. Default value is "env". 

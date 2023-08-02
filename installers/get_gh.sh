@@ -1,12 +1,15 @@
 #!/bin/bash
-set -e
-# get_gh.sh
+# get_gh.sh v1.2.0
 # -------------------
-# by zudsniper@github
+# 
 # I DO NOT GUARANTEE THAT THIS IS UP TO DATE
 # OR WORKS AT ALL
 #
 # IT PROBABLY DOESN'T
+# 
+# @zudsniper
+
+set -e
 
 YES_FLAG="$1"
 

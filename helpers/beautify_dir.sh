@@ -1,5 +1,5 @@
 #!/bin/bash
-# beautify_dir.sh
+# beautify_dir.sh v1.0.0
 # ---------------
 # by @zudsniper on github 
 # not really, its by chatGPT but i guess i get the credit

@@ -1,5 +1,5 @@
 #!/bin/bash
-# deb11_base.sh
+# deb11_base.sh v1.0.0
 # -------------
 # 
 # Installer / configuration for Debian 11 Bullseye... Wait isn't that what deb11_nonfree.sh does? 

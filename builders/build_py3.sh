@@ -1,5 +1,5 @@
 #!/bin/bash
-# build_py3.sh
+# build_py3.sh v1.0.0
 # ------------
 #
 # ℹ️ Currently supports MacOS & Debian/Ubuntu

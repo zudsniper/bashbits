@@ -1,10 +1,12 @@
 #!/bin/bash
-# get_py.sh
+# get_py.sh v0.1.1
 # ---------
-# 
+# Python3... obviously python3... 
 # This script installs and builds python from the official site from source based on the provided argument version. 
-# version 0.1.1
 #
+# @param $1 [OPTIONAL] provide the python version you would like installed (exactly, i think partial matching kinda works but I wouldn't risk it) 
+# --- 
+# 
 # @zudsniper
 
 # ANSI color codes

@@ -1,10 +1,12 @@
 #!/bin/bash
-# docker_merge.sh v2 by ChatGPT-4
+# docker_merge.sh v2.0.0
+# ---------
 # used to merge 2 or more docker images into a single new image via a multilayered Dockerfile being constructed then built.  
 # !! new to v2 -- added new CLI options to avoid inputting origins array if input is simple enough to warrant doing so.
-# ----------------------------- #
-# Human: @zudsniper 
+# 
+# @zudsniper 
 # i'm afraid
+# > update: no longer afraid
 
 set -e
 

@@ -1,7 +1,6 @@
 #!/bin/bash
-# to_gist.sh
+# to_gist.sh v0.3.4
 # ----------
-# v0.3.4
 # 
 # Simple script to upload a secret gist of a private repository subfile or 
 # subdirectory that the authenticated user has access to.  

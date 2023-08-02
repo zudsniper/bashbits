@@ -1,11 +1,12 @@
 #!/bin/bash
-# install_gum.sh
+# install_gum.sh v0.1.0
 # --------------
-# @zudsniper
+# 
 # written by ChatGPT3.5, almost entirely
 # SOURCE OF ALL INSTALLATION INFORMATION
 # https://github.com/charmbracelet/gum#installation
-# --------------
+# 
+# @zudsniper
 
 set -e
 

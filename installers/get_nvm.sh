@@ -1,10 +1,6 @@
 #!/bin/bash
-set -e
-# get_nvm.sh   
-# `VERSION` 2.0.0
+# get_nvm.sh v2.1.0  
 # -------------------
-# by zudsniper@github
-# & ChatGPT 3.5
 # 
 # I MAKE NO GUARANTEES THAT THIS SHIT EVEN WORKS, MUCH LESS THAT IT'S UP TO DATE.  
 # USE AT YOUR OWN RISK.  
@@ -12,11 +8,15 @@ set -e
 ##########################
 #       `SOURCES`        |
 # =======================|
-# Header help & argparse | https://medium.com/@brotandgames/build-a-custom-cli-with-bash-e3ce60cfb9a4
+# Header help & argparse |  https://medium.com/@brotandgames/build-a-custom-cli-with-bash-e3ce60cfb9a4
 # NVM installation guide |  https://github.com/nvm-sh/nvm#git-install
-# How to add multi-line  | https://stackoverflow.com/questions/23929235/multi-line-string-with-extra-space-preserved-indentation
+# How to add multi-line  |  https://stackoverflow.com/questions/23929235/multi-line-string-with-extra-space-preserved-indentation
 #                        |
 # ====================== #
+# 
+# @zudsniper
+
+set -e
 
 # Accept 'yes' command as an argument to avoid user input
 if command -v yes >/dev/null 2>&1; then

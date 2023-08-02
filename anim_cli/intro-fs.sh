@@ -1,13 +1,13 @@
 #!/bin/bash
-# intro-fs.sh
+# intro-fs.sh v1.0.0
 # -----------
-# by @zudsniper
-# > 04/29/2023
+# Created 04/29/2023
 # 
 # displays stupid fullscreen intro "rain" animation with set colors & emojis. Text is supplied as first argument. 
 # USAGE
 # ./intro-fs.sh "ZOD GAMING!!!!"
-# ------------
+# 
+# @zudsniper
 
 
 # ANSI escape codes for colors

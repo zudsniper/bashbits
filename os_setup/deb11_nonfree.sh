@@ -1,5 +1,5 @@
 #!/bin/bash
-# deb11_nonfree.sh 
+# deb11_nonfree.sh v1.2.1
 # ----------------
 # 
 # Configure debian 11 bullseye (iso link below) with firmware + nonfree + contrib included

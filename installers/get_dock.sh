@@ -1,5 +1,5 @@
 #!/bin/bash
-# get_dock.sh
+# get_dock.sh v1.2.3
 # -----------
 # 
 # Installs docker as well as docker-compose directly from docker sources using aptitude package manager.
