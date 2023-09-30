@@ -1,10 +1,12 @@
 # zod's ~/.bashrc (why isn't there a shebang here? lol)
 # v4.3.0
+# > I realized why there isn't a shebang here -- it's because this file is not meant to be executed, but rather sourced.
+# > Thanks Copilot... I didn't know that.
 # --------------- #
 # #     TODO
 # --------------- # 
 # _make sure to check for `TODO` within the text of this file if you are updating it, in case something isn't listed here._  
-# - add self-updating (at least version checks and warnings of outdateness)
+# - add self-updating (at least version checks and warnings if out of date)
 # - add smart-merging text files
 # - clean up the first lines of this script, taken from a Bullseye 11.6 Debian installation arbitrarily. Assess value & necessity. 
 # - standardize function header comments -- simply document more of the functionality of each addition
@@ -214,20 +216,28 @@ else
 fi
 }
 
-# TODO: Not sure this is necessary, but it may be
+# > Not sure this is necessary, but it may be depending on the other functions in this file.
 ## _______ OS DETERMINED _______ ##
 # "${opersys}"
 checkOS;
 # ----------------------------- #
 #           system
-alias lsa="ls -lhrta"
+alias lsa="ls -lhrta" # convenience alias for listing stuff in current dir in human readable format
 
 ## hibernation
+# > this is a bit of a hack, but it works. On Debian. Debian Bullseye. Sometimes.
+# FUNCTIONALITY
+#  sleepy - makes the system able to sleep, hibernate, or suspend
+#  noSleepy - makes the system unable to sleep, hibernate, or suspend
 alias sleepy="sudo systemctl mask sleep.target suspend.target hibernate.target hibernate-hybrid.target"
 alias noSleepy="sudo systemctl mask sleep.target suspend.target hibernate.target hibernate-hybrid.target"
 
 # ----------------------------- #
 # TF2Autobot management aliases
+
+# TODO
+# - add a function to check if the current directory is a TF2Autobot instance, and if so, set the BOT_ECOSYSTEM_FILE env var to the appropriate file name.
+# - fix the way ecosystem file is set / recognized.
 
 # first, set BOT_ECOSYSTEM_FILE if this is our first run
 if alias autobotDir >/dev/null 2>&1; then
@@ -247,13 +257,17 @@ alias restartAutobot="autobotDir; pm2 restart ./${BOT_ECOSYSTEM_FILE} --update-e
 # if docker installed
 if [ -x "$(command -v docker)" ]; then
     
-	# docker aliases
+	# # docker aliases
+
+	# docker list all containers
 	alias dockerLS="docker container ls -q"
+	# docker stop all containers
 	alias dockerGenocide="docker container kill $(docker container ls -q)"
 
+  # This alias starts portainer, a docker container management tool.
 	alias startPortainer="docker volume create portainer_data; docker run -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -itd portainer/portainer";
 
-	# attach with Bash to a container by id. Helpful for pterodactyl containers 
+	# FUNC => attach with Bash to a container by id. Helpful for pterodactyl containers
 	attachBashTo() {
 		if [[ "$#" -eq 0 ]]; then
 		       echo -ne "${A_RED}Please provide argument: container id${A_RESET}\n";
@@ -312,7 +326,7 @@ stopBotInstance() {
 # ----------------------------- #
 #            utility
 
-# simple analysis size function with normally installed linux CLI stuff
+# FUNC => simple analysis size function with normally installed linux CLI stuff
 # @param 1 - path: string - root path from which to search
 # @param 2 - n: number - the nth highest sized files will be displayed.
 findLargestNFiles() {
@@ -321,14 +335,14 @@ findLargestNFiles() {
                 exit 1;
         fi
 
-        ROOT_PATH = "/";
+        ROOT_PATH="/";
         if [[ -z ${1} ]]; then
-                ROOT_PATH = "${1}";
+                ROOT_PATH="${1}";
         fi
 
-        NUM_SHOWN = 10;
+        NUM_SHOWN=10;
         if [[ -z ${2} ]]; then
-                NUM_SHOWN = "${2}";
+                NUM_SHOWN="${2}";
         fi
 
 
@@ -343,7 +357,7 @@ findLargestNFiles() {
         exit 0;
 }
 
-# Merge two folders intelligently using rsync, of format `rmerge src/ dest/`  
+# FUNC => Merge two folders intelligently using rsync, of format `rmerge src/ dest/`
 # source: https://superuser.com/questions/547282/which-is-the-rsync-command-to-smartly-merge-two-folders
 # NOTE -- this will override any previous backup created via the -b option 
 alias rmerge="rsync -abviuzP"
@@ -352,7 +366,7 @@ alias rmerge="rsync -abviuzP"
 #     find and kill process
 #           by PORT
 
-# Kills the process which is detected as running on the provided port
+# FUNC => Kills the process which is detected as running on the provided port
 # @param $1 the port in question
 # 
 # NOTE -- Internal/Lighter version of dispatchPort() -- only handles a single argument and expects it to be provided. 
@@ -364,9 +378,8 @@ kPort() {
 	sudo fuser -k "$1";
 }
 
-# Kills the process which is detected as running on the provided port
+# FUNC => Kills the process which is detected as running on the provided port
 # @param $1 the port in question
-
 dispatchPort() {
 	if [ $# -eq 0 ]; then
 		echo -ne "${A_RED}${A_BOLD}No port provided as argument -- please do so. ${A_RESET}\n";
@@ -391,9 +404,10 @@ dispatchPort() {
 #       (utilize my `get_dock.sh` script **for debian based Linux**): https://gist.github.com/zudsniper/d79549fef48daeef1749757a850d12a6
 # 		- docker-engine 
 # 		
-
-alias get_gh="curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_gh.sh | /bin/bash";
-alias get_nvm="curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/get_nvm.sh | /bin/bash";
+# Installs gh via my installer script
+alias get_gh="curl -sL https://gh.zod.tf/bashbits/raw/master/installers/get_gh.sh | /bin/bash";
+# Installs nvm via my installer script
+alias get_nvm="curl -sL https://gh.zod.tf/bashbits/master/installers/get_nvm.sh | /bin/bash";
 
 
 

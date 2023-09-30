@@ -60,6 +60,17 @@ export A_BG_WHITE="\033[47m"
 export A_RESTORE="${A_RESET}"
 export A_INVERSE="${A_REVERSE}"
 
+# -----+-----+-----+-----+----- #
+# SIMPLE VARIABLE NAMES
+# These are the same as the above, but without the "A_" prefix.
+# CAUTION => Only some colors are exported this way in order to avoid conflicts. These aren't the best way to use these variables.
+# Also includes NC, which is a common alias for RESET.
+export NC="${A_RESET}"
+export RED="${A_RED}"
+EXPORT YELLOW="${A_YELLOW}"
+export GREEN="${A_GREEN}"
+export BLUE="${A_BLUE}"
+
 # -----X-----X-----X-----X----- # 
 # @DEPRECATED
 # These are the old definitions, including many colors which only some shells could render. 

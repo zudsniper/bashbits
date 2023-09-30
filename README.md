@@ -1,16 +1,35 @@
-# `bashbits` $v(\frac{0}{0}$ $+\ \lim_{x\to\infty} f(x) +$ $n^{f(x)})$
+# `bashbits` 🧰 
 > _a loose-leaf binder of my assorted scripts which I like being able to access via github._  
 > ### Now all in the same place!   
   
 ### by [@zudsniper](https://github.com/zudsniper)  
 
 ## LINKS 
-[`bashrc.zod.tf`](https://bashrc.zod.tf/)  
+- 🔗[`bashrc.zod.tf`](https://bashrc.zod.tf/)  
 _a direct link to my `~/.bashrc` file<sub>(always a work in progress)</sub>_
+- 🔗[`gh.zod.tf/bashbits/raw/master/*`](https://gh.zod.tf/bashbits/raw/master/.bashrc)  
+_shorthand to link directly to raw text of any file within this repo._
 
 ## VERSIONING  
 The versions for these are pretty asynchronous, and certainly NOT AT ALL kept track of. YMMV.  
-### 💘 _`v4.0.0`_
+### 💘 _`v4.0.1`_
+> #### `changelog`
+> `v4.0.1` **MacOS & Assorted Scripts**
+> - Added `.zshrc` for MacOS `Ventura 13.5.1` (Apple Silicon)<sub>though this was originally developed on Catalina (10.15.7), so...</sub>
+> - Added `gitget.sh` to get obtain and install a script from a github url, or author and repo combination using the releases of that repository. ***UNTESTED***, definitely doesn't work.
+> - Updates to `.ansi_colors.sh` to add shorthand color variable exports for very common colors `RED`, `GREEN`, `YELLOW`, `BLUE`, and `NC` as a shortcut for `RESET`. 
+> - Updated `README.md` to reflect changes, even the file structure diff thing _wow_.
+> 
+> ---
+> `v4.0.0` **Some Housekeeping**
+> - `.bashrc` adding planning and some actual additions
+> - `.ansi_colors.sh` updating the file to contain actually all the currently referenced colors within... itself. Hopefully.
+> - `README.md` Updating
+> - Updating the version definition convention which I am now imposing on all scripts I write for standardization purposes
+> - Deleted / moved old scripts such as the original locations of `get_nvm.sh`.
+> - Moved all scripts (for the most part) into descriptive folders
+> - more probably
+> ---
 
  ### 🌐 General Versioning Convention 
 I am now imposing a versioning convention explained as follows. This should be followed wherever possible.   
@@ -22,42 +41,39 @@ I am now imposing a versioning convention explained as follows. This should be f
 --- 
 
 ## FILES
-<sup> _(i know this is VERY out of date)_ </sup>
+
 > ```diff
->   📁 anim_cli ✨  
-> +    📄 bubbles-fs.sh   
->      📄 intro-fs.sh  
->      📄 shellwash-fs.sh   
-> + 📁 builders 🔧  
-> +    📄 build_py3.sh   
-> +    📄 build_tsnode.sh  
-> +    📄 shellwash-fs.sh  
-> + 📁 helpers 🩹  
-> +    📄 activenv.sh   
-> +    📄 beautify_dir.sh  
-> +    📄 docker_merge.sh   
-> +    📄 to_gist.sh 
-> + 📁 installers 💉  
-> +    📄 get_dock.sh   
-> +    📄 get_gh.sh  
-> +    📄 get_gum.sh   
-> +    📄 get_nvm.sh  
-> +    📄 get_py.sh  
-> + 📁 os_setup 🧫  
-> +    📄 deb11_base.sh  
-> +    📄 deb11_nonfree.sh  
-> + 📁 pgp 🧫  
-> +    📄 pgp_gen.sh  
-> - 📄 beautify_dir.sh   
-> - 📄 docker_merge.sh     
-> - 📄 get_gum.sh   
-> - 📄 get_gh.sh  
-> - 📄 get_nvm.sh                     
-> - 🧰 deb11_base.sh
+>  📁 anim_cli ✨  
+>     📄 bubbles-fs.sh   
+>     📄 intro-fs.sh  
+>     📄 shellwash-fs.sh   
+>  📁 builders 🔧  
+>     📄 build_py3.sh   
+>     📄 build_tsnode.sh  
+>     📄 shellwash-fs.sh  
+>  📁 helpers 🩹  
+>     📄 activenv.sh   
+>     📄 beautify_dir.sh  
+>     📄 docker_merge.sh   
+>     📄 to_gist.sh 
+>  📁 installers 💉  
+>     📄 get_dock.sh   
+>     📄 get_gh.sh  
+>     📄 get_gum.sh   
+>     📄 get_nvm.sh  
+>     📄 get_py.sh  
+>  📁 os_setup 🧫  
+>     📄 deb11_base.sh  
+>     📄 deb11_nonfree.sh  
+>  📁 pgp 🧫  
+>     📄 pgp_gen.sh
+> + 🧲 gitget.sh
 > + 🎨.ansi_colors.sh
-> + 🧬.bashrc   
+> + 🧫.zshrc  
+> + 🧬.bashrc
 > + 💭 README.md                     <-- 📍 YOU ARE HERE  
 >   📄 LICENSE    
+> + 💾 .gitignore
 > ```
 
 ## ONE-LINERS  

@@ -1,5 +1,5 @@
 #!/bin/bash
-# get_nvm.sh v2.1.0  
+# get_nvm.sh v2.1.1
 # -------------------
 # 
 # I MAKE NO GUARANTEES THAT THIS SHIT EVEN WORKS, MUCH LESS THAT IT'S UP TO DATE.  
@@ -39,8 +39,8 @@ fi
 source ~/.ansi_colors.sh
 # ----------------------------- #
 
-echo -ne "${A_GREEN}${A_INVERSE}${A_BOLD}get_gnvm.sh${A_RESET} by zudsniper\n"
-echo -ne "${A_BOLD}DEPENDENCIES${A_RESET}\n"
+echo -ne "${A_GREEN}${A_INVERSE}${A_BOLD}get_nvm.sh${A_RESET} by zudsniper\n"
+#echo -ne "${A_BOLD}DEPENDENCIES${A_RESET}\n"
 # echo -ne "${A_GRAY}${A_ITALIC}    ${A_UNDERLINE}https://bashrc.zod.tf/${A_RESET}\n\n"
 
 # PARSE ARGS

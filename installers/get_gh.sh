@@ -1,11 +1,14 @@
 #!/bin/bash
-# get_gh.sh v1.2.0
+# get_gh.sh v1.2.1
 # -------------------
 # 
 # I DO NOT GUARANTEE THAT THIS IS UP TO DATE
 # OR WORKS AT ALL
 #
 # IT PROBABLY DOESN'T
+# -------------------
+# [2023-09-30] It works to install gh 2.22.1 on Debian 11. That is all I can say with any dignity.
+#
 # 
 # @zudsniper
 
@@ -37,12 +40,17 @@ echo -ne "${A_BLUE}${A_BOLD}Installing GitHub Keys & expanding APT to contrib & 
   sudo apt-add-repository non-free;
 }
 
+# TODO: add support for other architectures
+# TODO: add a interactive warning for non-amd64 architectures
+# TODO: add support for downloading the latest version
+# this script sucks and is a mess it does like nothing right
 installGH_binary_debamd64() {
    echo -ne "${A_GREEN}${A_ITALIC}Installing gh${A_RESET} by ${A_RED}direct file download.${A_RESET}\n";
-   curl -sL https://github.com/cli/cli/releases/download/v2.22.1/gh_2.22.1_linux_amd64.deb -o ./gh_for_debamd64.deb;
-   wait $(jobs -p);
+   curl -sL https://github.com/cli/cli/releases/latest/download/gh_2.22.1_linux_amd64.deb -o ./gh_for_debamd64.deb;
+   wait "$(jobs -p)";
    chmod ugo+x ./gh_for_debamd64.deb;
    sudo apt install ./gh_for_debamd64.deb;
+   rm ./gh_for_debamd64.deb;
 }
 
 installGH_binary_debamd64;
