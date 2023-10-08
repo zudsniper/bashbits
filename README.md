@@ -36,8 +36,6 @@ I am now imposing a versioning convention explained as follows. This should be f
   
 > the second line of all files must contain, eventually, a `v` or `V` followed by a valid major.minor.patch[^1] version string.  
 
-<a href="https://zod.tf/"><img src="https://github.com/zudsniper/bashbits/assets/16076573/1f6a7bc0-daa9-401b-be05-693bf6357845" alt="second zod.tf logo" width="150rem" style="max-width: 100%;"></a>
-
 --- 
 
 ## FILES
