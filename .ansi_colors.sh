@@ -1,12 +1,16 @@
 #!/bin/bash
-# .ansi_colors.sh v2.2.0
-# --------------
-# Updated 2023-08-01
+# .ansi_colors.sh v2.2.1
+# -------------- 
+#
+# Updated 2023-10-14
 # 
 # This small script exports all ANSI color codes as variables prepended with "A_". It also offers convenience functions
 # ansi, colorize, and cecho. 
 #
 # @zudsniper
+
+# V2.2.1
+# - fixed a single "EXPORT" by replacing it with "export" 
 
 # V2.2.0
 # - adding changelogs in file until its too long
@@ -67,7 +71,7 @@ export A_INVERSE="${A_REVERSE}"
 # Also includes NC, which is a common alias for RESET.
 export NC="${A_RESET}"
 export RED="${A_RED}"
-EXPORT YELLOW="${A_YELLOW}"
+export YELLOW="${A_YELLOW}"
 export GREEN="${A_GREEN}"
 export BLUE="${A_BLUE}"
 
