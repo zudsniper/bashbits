@@ -1,8 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# v2.0.1
+# v2.0.2
 # ------
 #
 # by @zudsniper
+
+export CLICOLOR=1
 
 # ======== silly terminal prompts ======== #
 
@@ -21,7 +23,8 @@ short_prompt
 # ============ simple aliases ============ #
 
 # simple shortcuts
-alias lsa="ls -lhrta"
+alias lsa="ls -lhrtaG"
+alias ls="ls -G"
 
 # python3 bruh
 # NOTE: this will break a lot of stuff on macOS versions below catalina (10.15.7)
