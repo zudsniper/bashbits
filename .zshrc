@@ -1,7 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# v2.0.2
+# v2.0.3
 # ------
-#
+# 
+# v2.0.3 
+# - added nvm bindings (assumes `brew install nvm` has been run, idk if this is the default behavior I want)
+# 
 # by @zudsniper
 
 export CLICOLOR=1
@@ -110,6 +113,16 @@ export CAPACITOR_ANDROID_STUDIO_PATH="/usr/local/bin/scripts/studio"
 # macOS 10.15 moment
 # export PATH="/usr/local/sbin:$PATH"
 
+# node version manager (nvm) bindings export 
+# ensure that you've installed `nvm` for this to work, duh
+# `brew install nvm` 
+#
+# > "it's that easy!"
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 # Added by Amplify CLI binary installer
 export PATH="$HOME/.amplify/bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+
