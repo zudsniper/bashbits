@@ -1,9 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.1.1
+# .zshrc v2.1.2
 # ------------------
 # 
 # CHANGELOG
 #
+# v2.1.2 - fix more bugs
 # v2.1.1 - fix bugs
 # v2.1.0
 # - added update notifications for this file itself
@@ -30,26 +31,33 @@
 
 # Auto-update .zshrc if a newer version is available
 function update_zshrc() {
-  # Check if ZSHRC_CHECKUPDATE is set to a truthy value
-  if [[ "$ZSHRC_CHECKUPDATE" == "0" || "$ZSHRC_CHECKUPDATE" == "false" || "$ZSHRC_CHECKUPDATE" == "FALSE" ]]; then
+  # Check if ZSHRC_AUTOUPDATE is set to a truthy value
+  if [[ "$ZSHRC_AUTOUPDATE" == "0" || "$ZSHRC_AUTOUPDATE" == "false" || "$ZSHRC_AUTOUPDATE" == "FALSE" ]]; then
     return
   fi
+
   local zshrc_path="$HOME/.zshrc"
   local github_url="https://gh.zod.tf/bashbits/raw/master/.zshrc"
+
   # Extract local version from the last occurrence of 'v' in the second line of .zshrc
   local local_version=$(sed -n '2p' "$zshrc_path" | awk -F'v' '{print $NF}')
+
   # Fetch remote version from GitHub
   local remote_version=$(curl -sSL "$github_url" | sed -n '2p' | awk -F'v' '{print $NF}')
+
   # Compare versions and prompt for update if necessary
   if [[ "$local_version" != "$remote_version" ]]; then
     echo -e "A new version of .zshrc is available. Current: \033[0;31m$local_version\033[0m -> New: \033[0;32m$remote_version\033[0m"
     echo "To update, run 'autoupdate_zshrc'"
   fi
 }
+
 # Alias to auto-update .zshrc
 alias autoupdate_zshrc="curl -sSL -o $HOME/.zshrc https://gh.zod.tf/bashbits/raw/master/.zshrc && source $HOME/.zshrc && echo 'Updated and sourced .zshrc'"
+
 # Add the check to your .zshrc
 update_zshrc
+
 
 
 #################################################### 
@@ -149,21 +157,21 @@ function check_imgurbash2() {
 
   # Check if imgurbash2 exists locally
   if [[ -f "$imgurbash2_path" ]]; then
-    local local_version=$(grep -oP 'readonly VERSION="\K[^"]+' "$imgurbash2_path")
+    local local_version=$(awk -F'"' '/readonly VERSION=/ {print $2}' "$imgurbash2_path")
   else
     local local_version=""
   fi
 
   # Fetch the latest version from GitHub
-  local latest_version=$(curl -s "$github_url" | grep -oP 'readonly VERSION="\K[^"]+')
+  local latest_version=$(curl -s "$github_url" | awk -F'"' '/readonly VERSION=/ {print $2}')
 
   # Compare versions and update if necessary
   if [[ "$local_version" != "$latest_version" ]]; then
-    # echo "Updating imgurbash2 to version $latest_version..." # shouldn't echo stuff in a .*rc file, don't know why, just broke my .bashrc for a while one time so i don't do it anymore
-    curl -s -o "$imgurbash2_path" "$github_url"
-    chmod +x "$imgurbash2_path"
+    sudo curl -sSL -o "$imgurbash2_path" "$github_url" && sudo chmod +x "$imgurbash2_path"
   fi
 }
+
+
 
 # Add the check to your .zshrc
 check_imgurbash2
