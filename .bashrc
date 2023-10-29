@@ -1,21 +1,22 @@
-# zod's ~/.bashrc (why isn't there a shebang here? lol)
-# v4.3.0
-# > I realized why there isn't a shebang here -- it's because this file is not meant to be executed, but rather sourced.
-# > Thanks Copilot... I didn't know that.
-# --------------- #
-# #     TODO
-# --------------- # 
-# _make sure to check for `TODO` within the text of this file if you are updating it, in case something isn't listed here._  
+# zod's ~/.bashrc for most linux distros with bash
+# .bashrc v4.3.1
+# --------------- 
+#
+# TODO
+# (make sure to check for `TODO` within the text of this file if you are updating it, in case something isn't listed here.)    
 # - add self-updating (at least version checks and warnings if out of date)
 # - add smart-merging text files
 # - clean up the first lines of this script, taken from a Bullseye 11.6 Debian installation arbitrarily. Assess value & necessity. 
 # - standardize function header comments -- simply document more of the functionality of each addition
 # - add a Glossary to elucidate the additions of this script and how to get started with it.  
 # - [MAJOR] create a `~/.zshrc` much like this file, but for (mostly MacOS) `~/.zshrc` users
-# --------------- #  
-# #   CHANGELOG
-# --------------- # 
-# ## `v4.3.0``
+# 
+# CHANGELOG
+# 
+# v4.3.1
+# - reformatting header
+# 
+# v4.3.0
 # Gonna start keeping an update log here until it gets too long
 # - Adding `rmerge` alias for merging with rsync (check alias definition for source attribution)
 # - Updating the strategy information in this long comment header
@@ -25,12 +26,12 @@
 # - Adding TODO section in this header  
 # - Better differentiated between default debian ~/.bashrc and my own work 
 # 
-# ## `v4.2.1`
+# v4.2.1
 # (this is the version before adding this changelog, but you can check the github commits to see)
 # 
-# ---  
 # 
-# @zudsniper 
+# 
+# by @zudsniper 
 # --------------- 
 
 #################################################################

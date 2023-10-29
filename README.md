@@ -12,8 +12,15 @@ _shorthand to link directly to raw text of any file within this repo._
 
 ## VERSIONING  
 The versions for these are pretty asynchronous, and certainly NOT AT ALL kept track of. YMMV.  
-### 💘 _`v4.0.1`_
+### 🕷️ _`v4.0.2`_  
+
 > #### `changelog`
+> 
+> `v4.0.2` **File Description Formatting & `.zodignore`**
+> - added/improved headers for `helpers/env-succ.sh`, `helpers/image-prune.sh`, `.bashrc`, and `.zshrc`
+> - added `ignores/.zodignore` as first `.gitignore` template. see file for more info
+> 
+> ---  
 > `v4.0.1` **MacOS & Assorted Scripts**
 > - Added `.zshrc` for MacOS `Ventura 13.5.1` (Apple Silicon)<sub>though this was originally developed on Catalina (10.15.7), so...</sub>
 > - Added `gitget.sh` to get obtain and install a script from a github url, or author and repo combination using the releases of that repository. ***UNTESTED***, definitely doesn't work.
@@ -52,8 +59,12 @@ I am now imposing a versioning convention explained as follows. This should be f
 >  📁 helpers 🩹  
 >     📄 activenv.sh   
 >     📄 beautify_dir.sh  
->     📄 docker_merge.sh   
+>     📄 docker_merge.sh 
+> +   📄 env-succ.sh
+> +   📄 image-prune.sh    
 >     📄 to_gist.sh 
+>  📁 ignores 🚫
+> +   📄 .zodignore 
 >  📁 installers 💉  
 >     📄 get_dock.sh   
 >     📄 get_gh.sh  
@@ -65,8 +76,8 @@ I am now imposing a versioning convention explained as follows. This should be f
 >     📄 deb11_nonfree.sh  
 >  📁 pgp 🧫  
 >     📄 pgp_gen.sh
-> + 🧲 gitget.sh
-> + 🎨.ansi_colors.sh
+>   🧲 gitget.sh
+>   🎨.ansi_colors.sh
 > + 🧫.zshrc  
 > + 🧬.bashrc
 > + 💭 README.md                     <-- 📍 YOU ARE HERE  
@@ -75,6 +86,8 @@ I am now imposing a versioning convention explained as follows. This should be f
 > ```
 
 ## ONE-LINERS  
+<sup>🟨⬛️<i> this section will be removed or refactored in the next minor version!</i> 🟨⬛️</sup>  
+
 _Here are single-line, single-execution, daisychains of_ `bash` _to accomplish something or other._   
 
 <br />  

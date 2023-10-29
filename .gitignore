@@ -1,2 +1,5 @@
+# ironic that this doesn't use ./ignores/.zodignore format
+# not fixing it
+
 .idea/**
 .vscode/**

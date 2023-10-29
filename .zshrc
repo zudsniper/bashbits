@@ -1,12 +1,18 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# v2.0.3
-# ------
+# .zshrc v2.0.4
+# ------------------
+# 
+# CHANGELOG
+# v2.0.4
+# - reformatted header
 # 
 # v2.0.3 
 # - added nvm bindings (assumes `brew install nvm` has been run, idk if this is the default behavior I want)
 # 
 # by @zudsniper
+# ------------------
 
+# enable CLI color for zsh
 export CLICOLOR=1
 
 # ======== silly terminal prompts ======== #
