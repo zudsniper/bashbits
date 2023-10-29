@@ -1,9 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.1.0
+# .zshrc v2.1.1
 # ------------------
 # 
 # CHANGELOG
 #
+# v2.1.1 - fix bugs
 # v2.1.0
 # - added update notifications for this file itself
 # - added an autoupdate_zshrc alias which will do as the name suggests. 
@@ -33,28 +34,23 @@ function update_zshrc() {
   if [[ "$ZSHRC_CHECKUPDATE" == "0" || "$ZSHRC_CHECKUPDATE" == "false" || "$ZSHRC_CHECKUPDATE" == "FALSE" ]]; then
     return
   fi
-
   local zshrc_path="$HOME/.zshrc"
   local github_url="https://gh.zod.tf/bashbits/raw/master/.zshrc"
-
   # Extract local version from the last occurrence of 'v' in the second line of .zshrc
   local local_version=$(sed -n '2p' "$zshrc_path" | awk -F'v' '{print $NF}')
-
   # Fetch remote version from GitHub
-  local remote_version=$(curl -s "$github_url" | sed -n '2p' | awk -F'v' '{print $NF}')
-
+  local remote_version=$(curl -sSL "$github_url" | sed -n '2p' | awk -F'v' '{print $NF}')
   # Compare versions and prompt for update if necessary
   if [[ "$local_version" != "$remote_version" ]]; then
     echo -e "A new version of .zshrc is available. Current: \033[0;31m$local_version\033[0m -> New: \033[0;32m$remote_version\033[0m"
     echo "To update, run 'autoupdate_zshrc'"
   fi
 }
-
 # Alias to auto-update .zshrc
-alias autoupdate_zshrc="curl -s -o $HOME/.zshrc https://gh.zod.tf/bashbits/raw/master/.zshrc && source $HOME/.zshrc && echo 'Updated and sourced .zshrc'"
-
+alias autoupdate_zshrc="curl -sSL -o $HOME/.zshrc https://gh.zod.tf/bashbits/raw/master/.zshrc && source $HOME/.zshrc && echo 'Updated and sourced .zshrc'"
 # Add the check to your .zshrc
 update_zshrc
+
 
 #################################################### 
 
