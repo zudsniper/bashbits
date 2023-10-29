@@ -94,11 +94,11 @@ This code is all **MIT Licensed**.
 
 <i><code>zod.tf</code></i> 
 
-[![Discord](https://img.shields.io/discord/974855479975100487?label=tf2%20discord)](https://discord.gg/zodtf)  ![GitHub issue custom search](https://img.shields.io/github/issues-search?color=114444&label=issues&query=involves%3Azudsniper)  ![GitHub followers](https://img.shields.io/github/followers/zudsniper?style=social)  
+[![Discord](https://img.shields.io/discord/974855479975100487?label=tf2%20discord)](https://discord.zod.tf)  ![GitHub issue custom search](https://img.shields.io/github/issues-search?color=E771F0&label=issues&query=involves%3Azudsniper)  ![GitHub followers](https://img.shields.io/github/followers/zudsniper?style=social)  
 
 > _fullstack development, server administration, web design, branding creation, musical composition & performance, video editing, and more probably_   
 
-<a href="https://zod.tf/"><img src="https://github.com/zudsniper/bashbits/assets/16076573/1f6a7bc0-daa9-401b-be05-693bf6357845" alt="second zod.tf logo" width="150rem" style="max-width: 100%;"></a>
+<a href="https://zod.tf/"><img src="https://github.com/zudsniper/bashbits/assets/16076573/1f6a7bc0-daa9-401b-be05-693bf6357845" alt="second zod.tf logo" width="120px" style="max-width: 100%;"></a>
 
 
 [^1]: Regular expression that _should_ match all valid versions: `([0-9]+(.)){2}([0-9]+){1}(\-\w+)?`
