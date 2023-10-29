@@ -1,8 +1,17 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.0.4
+# .zshrc v2.1.0
 # ------------------
 # 
 # CHANGELOG
+#
+# v2.1.0
+# - added update notifications for this file itself
+# - added an autoupdate_zshrc alias which will do as the name suggests. 
+#
+# v2.0.5
+# - remove redundant nvm bindings added in 2.0.3 (lol)
+# - added imgurbash2 auto-download & update for imgur upload from CLI
+# 
 # v2.0.4
 # - reformatted header
 # 
@@ -11,6 +20,43 @@
 # 
 # by @zudsniper
 # ------------------
+
+####################################################
+# UPDATE NOTIFICATIONS & AUTO-UPDATE FUNCTIONALITY #
+#      -- written by chatgpt4 + plugins --         # 
+#################################################### 
+# > use env var ZSHRC_CHECKUPDATE to disable the update notifications if desired. 
+
+# Auto-update .zshrc if a newer version is available
+function update_zshrc() {
+  # Check if ZSHRC_CHECKUPDATE is set to a truthy value
+  if [[ "$ZSHRC_CHECKUPDATE" == "0" || "$ZSHRC_CHECKUPDATE" == "false" || "$ZSHRC_CHECKUPDATE" == "FALSE" ]]; then
+    return
+  fi
+
+  local zshrc_path="$HOME/.zshrc"
+  local github_url="https://gh.zod.tf/bashbits/raw/master/.zshrc"
+
+  # Extract local version from the last occurrence of 'v' in the second line of .zshrc
+  local local_version=$(sed -n '2p' "$zshrc_path" | awk -F'v' '{print $NF}')
+
+  # Fetch remote version from GitHub
+  local remote_version=$(curl -s "$github_url" | sed -n '2p' | awk -F'v' '{print $NF}')
+
+  # Compare versions and prompt for update if necessary
+  if [[ "$local_version" != "$remote_version" ]]; then
+    echo -e "A new version of .zshrc is available. Current: \033[0;31m$local_version\033[0m -> New: \033[0;32m$remote_version\033[0m"
+    echo "To update, run 'autoupdate_zshrc'"
+  fi
+}
+
+# Alias to auto-update .zshrc
+alias autoupdate_zshrc="curl -s -o $HOME/.zshrc https://gh.zod.tf/bashbits/raw/master/.zshrc && source $HOME/.zshrc && echo 'Updated and sourced .zshrc'"
+
+# Add the check to your .zshrc
+update_zshrc
+
+#################################################### 
 
 # enable CLI color for zsh
 export CLICOLOR=1
@@ -93,12 +139,50 @@ alias update_gist=refresh_gist
 
 # ======== image / video conversion automation ======== #
 
+# imgurbash2
+# ------------
+# https://github.com/ram-on/imgurbash2.git
+# script to upload images to imgur easily without a client id or api key. 
+# how God intended. 
+
+# -- acquisition and update checking function below written by chatgpt4 + plugins -- # 
+# Check for imgurbash2 script and update if necessary
+function check_imgurbash2() {
+  local imgurbash2_path="/usr/local/bin/imgurbash2"  # Change this to your desired path
+  local github_url="https://raw.githubusercontent.com/ram-on/imgurbash2/master/imgurbash2"
+
+  # Check if imgurbash2 exists locally
+  if [[ -f "$imgurbash2_path" ]]; then
+    local local_version=$(grep -oP 'readonly VERSION="\K[^"]+' "$imgurbash2_path")
+  else
+    local local_version=""
+  fi
+
+  # Fetch the latest version from GitHub
+  local latest_version=$(curl -s "$github_url" | grep -oP 'readonly VERSION="\K[^"]+')
+
+  # Compare versions and update if necessary
+  if [[ "$local_version" != "$latest_version" ]]; then
+    # echo "Updating imgurbash2 to version $latest_version..." # shouldn't echo stuff in a .*rc file, don't know why, just broke my .bashrc for a while one time so i don't do it anymore
+    curl -s -o "$imgurbash2_path" "$github_url"
+    chmod +x "$imgurbash2_path"
+  fi
+}
+
+# Add the check to your .zshrc
+check_imgurbash2
+
+# Add imgurbash2 to PATH (if it's not in a standard location already)
+# export PATH="$PATH:/path/to/imgurbash2"  # Uncomment and modify this line if necessary
+# ------------
+
+
 # video_to_gif
 # ------------
 # this is for quicktime mov -> gif
 # from https://gist.github.com/SheldonWangRJT/8d3f44a35c8d1386a396b9b49b43c385
 alias video_to_gif='function video_to_gif(){ ffmpeg -i "$1" "${1%.*}.gif" && gifsicle -O3 "${1%.*}.gif" -o "${1%.*}.gif" && osascript -e "display notification \"${1%.*}.gif successfully converted and saved\" with title \"MOV2GIF SUCCESS!\""};video_to_gif'
-
+# ------------
 
 # ===================== nvm bindings ================== #
 
@@ -118,15 +202,6 @@ export CAPACITOR_ANDROID_STUDIO_PATH="/usr/local/bin/scripts/studio"
 # 🚫 removed because 13.5.1
 # macOS 10.15 moment
 # export PATH="/usr/local/sbin:$PATH"
-
-# node version manager (nvm) bindings export 
-# ensure that you've installed `nvm` for this to work, duh
-# `brew install nvm` 
-#
-# > "it's that easy!"
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Added by Amplify CLI binary installer
 export PATH="$HOME/.amplify/bin:$PATH"
