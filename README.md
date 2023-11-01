@@ -70,7 +70,8 @@ I am now imposing a versioning convention explained as follows. This should be f
 >     📄 get_gh.sh  
 >     📄 get_gum.sh   
 >     📄 get_nvm.sh  
->     📄 get_py.sh  
+>     📄 get_py.sh
+> +   📄 install_disable-keyboard.sh  
 >  📁 os_setup 🧫  
 >     📄 deb11_base.sh  
 >     📄 deb11_nonfree.sh  
