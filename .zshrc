@@ -1,8 +1,11 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.1.2
+# .zshrc v2.1.3
 # ------------------
 # 
 # CHANGELOG
+#
+# v2.1.3 
+# - remove (?) bash-like bindings in favor of zsh & brew dependent binding style
 #
 # v2.1.2 - fix more bugs
 # v2.1.1 - fix bugs
@@ -190,10 +193,20 @@ alias video_to_gif='function video_to_gif(){ ffmpeg -i "$1" "${1%.*}.gif" && gif
 
 # ===================== nvm bindings ================== #
 
+# ---------------------------------- # 
+# THIS IS FOR BASH, WE ARE USING ZSH
+# 
 # node version manager (nvm) linking
-export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+#   [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+#   [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# ---------------------------------- # 
+
+# appropriate zsh binding (assuming installation with homebrew)
+# credit: https://gist.github.com/mike-casas/6d489bebf48d89f5109cd1395aabe150
+# 
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
 
 # ===================== miscellaneous ================= #
 
