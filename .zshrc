@@ -1,9 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.1.3
+# .zshrc v2.1.4
 # ------------------
 # 
 # CHANGELOG
 #
+# v2.1.4 - added NVM_SYMLINK_CURRENT true for nvm quality of life in IDE
 # v2.1.3 
 # - remove (?) bash-like bindings in favor of zsh & brew dependent binding style
 #
@@ -202,9 +203,14 @@ alias video_to_gif='function video_to_gif(){ ffmpeg -i "$1" "${1%.*}.gif" && gif
 #   [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 # ---------------------------------- # 
 
+# add nvm env var to enable a symlink ~/.nvm/current for use with IDEs to make shit less annoying
+# credit: https://medium.com/@danielzen/using-nvm-with-webstorm-or-other-ide-d7d374a84eb1
+
+export NVM_SYMLINK_CURRENT=true
+
 # appropriate zsh binding (assuming installation with homebrew)
 # credit: https://gist.github.com/mike-casas/6d489bebf48d89f5109cd1395aabe150
-# 
+
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
