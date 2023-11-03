@@ -1,7 +1,8 @@
 # `bashbits` 🧰 
-> _a loose-leaf binder of my assorted scripts which I like being able to access via github._  
-> ### Now all in the same place!   
-  
+> _a loose-leaf binder of my assorted scripts which I like being able to access via github._
+> ### Now all in the same place!
+> _also now... not all Bourne Again SHell scripts._
+> 
 ### by [@zudsniper](https://github.com/zudsniper)  
 
 ## LINKS 
@@ -86,6 +87,8 @@ I am now imposing a versioning convention explained as follows. This should be f
 > + 💾 .gitignore
 > ```
 
+<details><summary>🦺 <i>DEPRECATED "ONE-LINERS" SECTION</i></summary>
+
 ## ONE-LINERS  
 <sup>🟨⬛️<i> this section will be removed or refactored in the next minor version!</i> 🟨⬛️</sup>  
 
@@ -100,13 +103,23 @@ Install `deb11_base.sh` on a clean install of debian 11.
 curl -sL https://raw.githubusercontent.com/zudsniper/bashbits/master/deb11_base.sh -o ~/build.sh; chmod ugo+X ~/build.sh; ./build.sh -r me -pw password -k "ssh-rsa xx"; source ~/.bashrc; settitle "$(hostname -f)";
 ```
 
+</details>
+
+## CONTRIBUTING  
+<h4><b>if you want to help, <i>please do!</i></b></h4>  
+just fork this repo & get at it, then PR!  
+feel free to contact me (see my profile for various contact methods) if I do not respond in a timely manner to a PR -- but I probably will.   
+
+> Massive thank you for any and all contributions.<sup><i>unless the contributions reeeeallllyyy suck of course</i></sup>  
+This is just a pet project, but it would be neat if it can help others.    
+
 ## LICENSE
 This code is all **MIT Licensed**.  
 📄 [`LICENSE`](/LICENSE)  
 
 <hr>
 
-<i><code>zod.tf</code></i> 
+<i><code>gh.zod.tf</code></i> 
 
 [![Discord](https://img.shields.io/discord/974855479975100487?label=tf2%20discord)](https://discord.zod.tf)  ![GitHub issue custom search](https://img.shields.io/github/issues-search?color=E771F0&label=issues&query=involves%3Azudsniper)  ![GitHub followers](https://img.shields.io/github/followers/zudsniper?style=social)  
 
