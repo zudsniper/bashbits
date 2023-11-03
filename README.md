@@ -143,4 +143,4 @@ This code is all **MIT Licensed**.
 
 
 [^1]: Regular expression that _should_ match all valid versions: `([0-9]+(.)){2}([0-9]+){1}(\-\w+)?`
-[^2]: 
+[^2]: See [`.zshrc`](https://gh.zod.tf/bashbits/tree/master/.zshrc), [`ignores/.zodignore`](https://gh.zod.tf/bashbits/tree/master/ignores/.zodignore)
