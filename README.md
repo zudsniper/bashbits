@@ -5,11 +5,25 @@
 > 
 ### by [@zudsniper](https://github.com/zudsniper)  
 
+
+## ABSTRACT
+I find myself often in the situation where I wish I had a script I wrote in the past available easily -- and indeed, not entirely lost to time. The purpose of this repository is to keep this situation from occuring as best as possible. The focus is on `bash` scripts, and UNIX environments, but this is not enforced[^2] and has never been a hard-and-fast rule anyway. 
+This project is pretty much entirely self-serving, but perhaps it can help others in some way at some point. If you find yourself using it, let me know. That would be neat. If you want to contribute, see [CONTRIBUTING](#contributing), and thanks!  
+
+#### 📌 **Use with care, and at your own risk!** 
+
 ## LINKS 
 - 🔗[`bashrc.zod.tf`](https://bashrc.zod.tf/)  
 _a direct link to my `~/.bashrc` file<sub>(always a work in progress)</sub>_
 - 🔗[`gh.zod.tf/bashbits/raw/master/*`](https://gh.zod.tf/bashbits/raw/master/.bashrc)  
-_shorthand to link directly to raw text of any file within this repo._
+_shorthand to link directly to raw text of any file within this repo._  
+> ### Usage Example
+> _this runs the addressed script via `/bin/bash` without downloading it to a file._   
+ ```sh
+curl -sSL https://gh.zod.tf/bashbits/raw/master/{{FILE_NAME}}.sh | /bin/bash
+```
+> 🔶 **Use With Caution!** Hopefully it's fairly clear, but this could have catastrophic consequences if you haven't evaluated (or, ya know, written yourself) the script you're executings' authenticity and/or contents.   
+
 
 ## VERSIONING  
 The versions for these are pretty asynchronous, and certainly NOT AT ALL kept track of. YMMV.  
@@ -129,3 +143,4 @@ This code is all **MIT Licensed**.
 
 
 [^1]: Regular expression that _should_ match all valid versions: `([0-9]+(.)){2}([0-9]+){1}(\-\w+)?`
+[^2]: 
