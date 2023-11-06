@@ -1,9 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.2.0
+# .zshrc v2.2.1
 # ------------------
 # 
 # CHANGELOG
 #
+# v2.2.1 - fix an oopsie (arg check in setTerminalText)
 # v2.2.0 
 # - added window / tab title changing functionality with SetTerminalText function & shortcuts
 # 
@@ -157,7 +158,7 @@ alias update_gist=refresh_gist
 # $1 = type; 0 - both, 1 - tab, 2 - title
 # rest = text
 setTerminalText () {
-    if [ "#@" -eq 0 ]; then 
+    if [ "$#" -eq 0 ]; then 
       echo "usage: setTerminalText [header-set-type] (any amount of text)"
       echo ""
       echo "    header-set-type [0-2]"
