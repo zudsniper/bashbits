@@ -1,9 +1,12 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.1.4
+# .zshrc v2.2.0
 # ------------------
 # 
 # CHANGELOG
 #
+# v2.2.0 
+# - added window / tab title changing functionality with SetTerminalText function & shortcuts
+# 
 # v2.1.4 - added NVM_SYMLINK_CURRENT true for nvm quality of life in IDE
 # v2.1.3 
 # - remove (?) bash-like bindings in favor of zsh & brew dependent binding style
@@ -143,6 +146,38 @@ function refresh_gist() {
 }
 
 alias update_gist=refresh_gist
+
+
+# ======== modify title text shortcut funcs ======= # 
+
+# CREDIT: https://superuser.com/a/344397/1797735
+# Thank you @Orangenhain on StackExchange! 
+# > Somewhat modified for quality of life
+
+# $1 = type; 0 - both, 1 - tab, 2 - title
+# rest = text
+setTerminalText () {
+    if [ "#@" -eq 0 ]; then 
+      echo "usage: setTerminalText [header-set-type] (any amount of text)"
+      echo ""
+      echo "    header-set-type [0-2]"
+      echo "    0 - both"
+      echo "    1 - tab"
+      echo "    2 - title"
+      echo ""
+      echo "* if you're using zod's ~/.zshrc, here are shortcut functions you can use *"
+      echo "    stt_both (text)"
+      echo "    stt_tab (text)"
+      echo "    stt_title (text)"
+    fi 
+
+    # echo works in bash & zsh
+    local mode=$1 ; shift
+    echo -ne "\033]$mode;$@\007"
+}
+stt_both  () { setTerminalText 0 $@; }
+stt_tab   () { setTerminalText 1 $@; }
+stt_title () { setTerminalText 2 $@; }
 
 
 # ======== image / video conversion automation ======== #
