@@ -1,5 +1,5 @@
 #!/bin/bash
-# install_disable-keyboard.sh
+# install_disable-keyboard.sh v1.0.1
 # ------------------
 # by @zudsniper on github
 # 
@@ -31,7 +31,7 @@ print_status() {
 
 # Step 1: Create disable-keyboard.sh
 print_status "success" "Creating disable-keyboard.sh..."
-cat << 'EOF' > /tmp/disable-keyboard.sh
+cat << 'EOF' > /dev/disable-keyboard.sh
 #!/bin/bash
 
 export DISABLE_NAME=${DISABLE_NAME:-"AT Translated Set 2 keyboard"}
@@ -75,7 +75,7 @@ Description=Disable Internal Keyboard
 
 [Service]
 Type=simple
-ExecStart=/bin/bash /tmp/disable-keyboard.sh
+ExecStart=/bin/bash /dev/disable-keyboard.sh
 Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/home/$USER/.Xauthority"
 
@@ -97,7 +97,9 @@ else
 fi
 
 # Step 4: Cleanup
-rm /tmp/disable-keyboard.sh
+# v1.0.1 - this doesn't make any sense lol
+#          also moved to /dev/disable-keyboard.sh for persistence
+# rm /tmp/disable-keyboard.sh
 rm /tmp/disable-keyboard.service
 
 print_status "success" "Cleanup complete. You're all set!"
