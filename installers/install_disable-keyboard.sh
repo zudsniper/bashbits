@@ -1,5 +1,5 @@
 #!/bin/bash
-# install_disable-keyboard.sh v1.0.2
+# install_disable-keyboard.sh v1.0.3
 # ------------------
 # by @zudsniper on github
 # 
@@ -31,7 +31,7 @@ print_status() {
 
 # Step 1: Create disable-keyboard.sh
 print_status "success" "Creating disable-keyboard.sh..."
-cat << 'EOF' > /dev/disable-keyboard.sh
+cat << 'EOF' > /tmp/disable-keyboard.sh
 #!/bin/bash
 
 export DISABLE_NAME=${DISABLE_NAME:-"AT Translated Set 2 keyboard"}
@@ -64,6 +64,7 @@ fi
 log_to_systemd "Successfully disabled device '$DISABLE_NAME'."
 EOF
 
+sudo cp /tmp/disable-keyboard.sh /dev/
 sudo chmod ugo+x /dev/disable-keyboard.sh
 print_status "success" "Created disable-keyboard.sh"
 
