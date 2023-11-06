@@ -1,5 +1,5 @@
 #!/bin/bash
-# install_disable-keyboard.sh v1.0.1
+# install_disable-keyboard.sh v1.0.2
 # ------------------
 # by @zudsniper on github
 # 
@@ -64,7 +64,7 @@ fi
 log_to_systemd "Successfully disabled device '$DISABLE_NAME'."
 EOF
 
-chmod +x /tmp/disable-keyboard.sh
+sudo chmod ugo+x /dev/disable-keyboard.sh
 print_status "success" "Created disable-keyboard.sh"
 
 # Step 2: Create systemd service file
@@ -88,6 +88,8 @@ print_status "success" "Created systemd service file"
 # Step 3: Install and enable the service
 print_status "success" "Installing and enabling systemd service..."
 sudo cp /tmp/disable-keyboard.service /etc/systemd/system/
+# v1.0.2 - added because necessary for ... functionality ... i think
+sudo chmod ugo+x /etc/systemd/system/disable-keyboard.sh
 sudo systemctl daemon-reload
 sudo systemctl enable disable-keyboard.service
 if [[ $? -eq 0 ]]; then
