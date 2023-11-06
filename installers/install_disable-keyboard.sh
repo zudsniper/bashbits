@@ -1,8 +1,13 @@
 #!/bin/bash
-# install_disable-keyboard.sh v1.0.3
+# install_disable-keyboard.sh v1.1.0
+#
 # ------------------
 # by @zudsniper on github
 # 
+# v1.1.0
+# this may actually work now 
+# maybe 
+#
 # create and then install a very specific script which utilizes `xinput` to disable the 
 # built-in laptop keyboard of a specific laptop being used as a server here 
 # 
@@ -64,8 +69,8 @@ fi
 log_to_systemd "Successfully disabled device '$DISABLE_NAME'."
 EOF
 
-sudo cp /tmp/disable-keyboard.sh /dev/
-sudo chmod ugo+x /dev/disable-keyboard.sh
+sudo cp "/tmp/disable-keyboard.sh" "$HOME/"
+sudo chmod ugo+x "$HOME/disable-keyboard.sh"
 print_status "success" "Created disable-keyboard.sh"
 
 # Step 2: Create systemd service file
@@ -76,7 +81,7 @@ Description=Disable Internal Keyboard
 
 [Service]
 Type=simple
-ExecStart=/bin/bash /dev/disable-keyboard.sh
+ExecStart=/bin/bash $HOME/disable-keyboard.sh
 Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/home/$USER/.Xauthority"
 
@@ -88,9 +93,9 @@ print_status "success" "Created systemd service file"
 
 # Step 3: Install and enable the service
 print_status "success" "Installing and enabling systemd service..."
-sudo cp /tmp/disable-keyboard.service /etc/systemd/system/
+sudo cp /tmp/disable-keyboard.service "/etc/systemd/system/"
 # v1.0.2 - added because necessary for ... functionality ... i think
-sudo chmod ugo+x /etc/systemd/system/disable-keyboard.sh
+sudo chmod ugo+x /etc/systemd/system/disable-keyboard.service
 sudo systemctl daemon-reload
 sudo systemctl enable disable-keyboard.service
 if [[ $? -eq 0 ]]; then
@@ -101,8 +106,8 @@ fi
 
 # Step 4: Cleanup
 # v1.0.1 - this doesn't make any sense lol
-#          also moved to /dev/disable-keyboard.sh for persistence
-# rm /tmp/disable-keyboard.sh
+#          also moved to $HOME/disable-keyboard.sh for persistence
+rm /tmp/disable-keyboard.sh
 rm /tmp/disable-keyboard.service
 
 print_status "success" "Cleanup complete. You're all set!"
