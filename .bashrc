@@ -1,5 +1,5 @@
 # zod's ~/.bashrc for most linux distros with bash
-# .bashrc v4.3.1
+# .bashrc v4.3.2
 # --------------- 
 #
 # TODO
@@ -13,6 +13,7 @@
 # 
 # CHANGELOG
 # 
+# v4.3.2 - finally added check for `.nvm` directory before sourcing so that nvm doesn't 'need' to be installed to use this .bashrc
 # v4.3.1
 # - reformatting header
 # 
@@ -513,11 +514,14 @@ function update_all {
 # ----------------------------- #
 #          nvm sourcing
 
-# if nvm dir is not empty, source nvm 
-if [ "$(ls -A "$HOME/.nvm")" ]; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Check if .nvm directory exists
+if [ -d "$HOME/.nvm" ]; then
+  # if nvm dir is not empty, source nvm 
+  if [ "$(ls -A "$HOME/.nvm")" ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  fi
 fi
 # 98% chance this ^^^^ will be added again to the file by something. Even my script for installing nvm does it lmao 
 
