@@ -1,7 +1,19 @@
-# zod's ~/.bashrc for most linux distros with bash
-# .bashrc v4.3.2
+# zod's ~/.bashrc for most linux distros using bash
+# .bashrc v4.4.0
 # --------------- 
 #
+#################################################################
+#                    __       __               __             
+#   ____  ____  ____/ /____  / /_  ____ ______/ /_  __________
+#  /_  / / __ \/ __  / ___/ / __ \/ __ `/ ___/ __ \/ ___/ ___/
+#   / /_/ /_/ / /_/ (__  ) / /_/ / /_/ (__  ) / / / /  / /__  
+#  /___/\____/\__,_/____(_)_.___/\__,_/____/_/ /_/_/   \___/  
+# 
+#################################################################
+# /bin/bash configs by @zudsniper, or "zod"
+# 
+# available at https://bashrc.zod.tf
+# 
 # TODO
 # (make sure to check for `TODO` within the text of this file if you are updating it, in case something isn't listed here.)    
 # - add self-updating (at least version checks and warnings if out of date)
@@ -10,8 +22,14 @@
 # - standardize function header comments -- simply document more of the functionality of each addition
 # - add a Glossary to elucidate the additions of this script and how to get started with it.  
 # - [MAJOR] create a `~/.zshrc` much like this file, but for (mostly MacOS) `~/.zshrc` users
-# 
+# ---------------  
+#
 # CHANGELOG
+# 
+# v4.4.0
+# - retooled for handling of sudo requirements / authorization for silent sourceing whether or not the 
+#   executing user is a member of sudo or docker group or not. 
+# - moving around some comments such as figfont header
 # 
 # v4.3.2 - finally added check for `.nvm` directory before sourcing so that nvm doesn't 'need' to be installed to use this .bashrc
 # v4.3.1
@@ -177,19 +195,9 @@ alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -l'
 alias l='ls $LS_OPTIONS -lA'
 
-
-
 #################################################################
-#                    __       __               __             
-#   ____  ____  ____/ /____  / /_  ____ ______/ /_  __________
-#  /_  / / __ \/ __  / ___/ / __ \/ __ `/ ___/ __ \/ ___/ ___/
-#   / /_/ /_/ / /_/ (__  ) / /_/ / /_/ (__  ) / / / /  / /__  
-#  /___/\____/\__,_/____(_)_.___/\__,_/____/_/ /_/_/   \___/  
-# 
+# END FROM DEBIAN BULLSEYE 11.6 DEFAULT ~/.bashrc
 #################################################################
-# /bin/bash configs by @zudsniper, or "zod"
-# 
-# available at https://bashrc.zod.tf
 
 # ----------------------------- #
 # check executing operating system of this bash instance
@@ -256,29 +264,54 @@ alias restartAutobot="autobotDir; pm2 restart ./${BOT_ECOSYSTEM_FILE} --update-e
 # ----------------------------- #
 #            docker 
 
+# v4.4.0 
+# retooled for handling of sudo requirements / authorization for silent sourceing whether or not the 
+# executing user is a member of sudo or docker group or not. 
+
+# Checks if the user has permission to run Docker without sudo.
+can_run_docker() {
+    docker info > /dev/null 2>&1
+}
+
+# Function to run Docker with or without sudo based on permission.
+run_docker() {
+    if can_run_docker; then
+        docker "$@"
+    else
+        sudo docker "$@"
+    fi
+}
+
 # if docker installed
 if [ -x "$(command -v docker)" ]; then
-    
-	# # docker aliases
 
-	# docker list all containers
-	alias dockerLS="docker container ls -q"
-	# docker stop all containers
-	alias dockerGenocide="docker container kill $(docker container ls -q)"
-
-  # This alias starts portainer, a docker container management tool.
-	alias startPortainer="docker volume create portainer_data; docker run -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -itd portainer/portainer";
-
-	# FUNC => attach with Bash to a container by id. Helpful for pterodactyl containers
-	attachBashTo() {
-		if [[ "$#" -eq 0 ]]; then
-		       echo -ne "${A_RED}Please provide argument: container id${A_RESET}\n";
-		       return;
-		fi
- 		docker exec -it	"$1" /bin/bash;	
-	}
+    # Check if we can run Docker without sudo or not.
+    if can_run_docker; then
+        alias dockerLS="docker container ls -q"
+        alias dockerGenocide="docker container kill \$(docker container ls -q)"
+        alias startPortainer="docker volume create portainer_data; docker run -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -itd portainer/portainer"
+        attachBashTo() {
+            if [[ "$#" -eq 0 ]]; then
+                echo -ne "Please provide argument: container id\n"
+                return
+            fi
+            docker exec -it "$1" /bin/bash
+        }
+    else
+        alias dockerLS="sudo docker container ls -q"
+        alias dockerGenocide="sudo docker container kill \$(sudo docker container ls -q)"
+        alias startPortainer="sudo docker volume create portainer_data; sudo docker run -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data -itd portainer/portainer"
+        attachBashTo() {
+            if [[ "$#" -eq 0 ]]; then
+                echo -ne "Please provide argument: container id\n"
+                return
+            fi
+            sudo docker exec -it "$1" /bin/bash
+        }
+    fi
 
 fi
+
 
 # ------------------------------ #
 # TF2Autobot management functions
