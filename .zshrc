@@ -1,9 +1,10 @@
 # zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.2.1
+# .zshrc v2.2.2
 # ------------------
 # 
 # CHANGELOG
 #
+# v2.2.2 - added pss() function to create file from current clipboard contents CREDIT: (https://apple.stackexchange.com/a/391795/497602)
 # v2.2.1 - fix an oopsie (arg check in setTerminalText)
 # v2.2.0 
 # - added window / tab title changing functionality with SetTerminalText function & shortcuts
@@ -219,6 +220,33 @@ check_imgurbash2
 # Add imgurbash2 to PATH (if it's not in a standard location already)
 # export PATH="$PATH:/path/to/imgurbash2"  # Uncomment and modify this line if necessary
 # ------------
+
+# Paste Screen Shot to file (in folder provided as arg1)
+# - only works with PNG encoded images! 
+# 
+# credit to https://apple.stackexchange.com/a/391795/497602 ! 
+function pss() {
+    folder=$(pwd)
+    filename="clipboard_$(date +%Y-%m-%d-%H_%M_%S).png"
+
+    if [ $# -ne 0 ]; then
+        if [[ -d $1 ]]; then
+            if [ "$1" != "." ]; then folder=$1; fi
+        else
+            a=$(dirname "$1")
+            b=$(basename "$1" .png)
+
+            if [ "$b" != "" ]; then filename=$b.png; fi
+
+            if [ "$a" != "." ]; then folder=$a; fi
+        fi
+    fi
+
+    osascript -e "tell application \"System Events\" to ¬
+            write (the clipboard as «class PNGf») to ¬
+            (make new file at folder \"$folder\" ¬
+            with properties {name:\"$filename\"})"
+}
 
 
 # video_to_gif
