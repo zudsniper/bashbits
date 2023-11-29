@@ -1,6 +1,5 @@
 #!/bin/bash
-# gitget.sh
-# v1.0.2
+# gitget.sh v1.0.2
 # -------------------
 # CAUTION => THIS IS UNTESTED
 # (2023-09-30)
