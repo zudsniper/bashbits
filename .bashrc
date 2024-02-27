@@ -547,6 +547,9 @@ function update_all {
 # ----------------------------- #
 #          nvm sourcing
 
+# enable the "~/.nvm/current" symlink
+NVM_SYMLINK_CURRENT=true
+
 # Check if .nvm directory exists
 if [ -d "$HOME/.nvm" ]; then
   # if nvm dir is not empty, source nvm 
