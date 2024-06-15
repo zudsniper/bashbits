@@ -1,5 +1,5 @@
 # zod's ~/.bashrc for most linux distros using bash
-# .bashrc v4.4.0
+# .bashrc v4.5.0
 # --------------- 
 #
 #################################################################
@@ -16,15 +16,18 @@
 # 
 # TODO
 # (make sure to check for `TODO` within the text of this file if you are updating it, in case something isn't listed here.)    
-# - add self-updating (at least version checks and warnings if out of date)
-# - add smart-merging text files
-# - clean up the first lines of this script, taken from a Bullseye 11.6 Debian installation arbitrarily. Assess value & necessity. 
-# - standardize function header comments -- simply document more of the functionality of each addition
-# - add a Glossary to elucidate the additions of this script and how to get started with it.  
-# - [MAJOR] create a `~/.zshrc` much like this file, but for (mostly MacOS) `~/.zshrc` users
+# - [X] add self-updating (at least version checks and warnings if out of date)
+# - [ ] add smart-merging text files
+# - [ ] clean up the first lines of this script, taken from a Bullseye 11.6 Debian installation arbitrarily. Assess value & necessity. 
+# - [ ] standardize function header comments -- simply document more of the functionality of each addition
+# - [ ] add a Glossary to elucidate the additions of this script and how to get started with it.  
+# - [X] [MAJOR] create a `~/.zshrc` much like this file, but for (mostly MacOS) `~/.zshrc` users
 # ---------------  
 #
 # CHANGELOG
+# 
+# v4.5.0
+# - added auto-update functionality based on the implemented auto-update functionality in my .zshrc
 # 
 # v4.4.0
 # - retooled for handling of sudo requirements / authorization for silent sourceing whether or not the 
@@ -98,6 +101,59 @@ fi
 # this bit is written by @zudsniper, but is just a short snippet that must be here for color reasons. 
 #     After the next delimiter bar (like the one above & below this text), we return to the base ~/.bashrc as described earlier.
 #################################################################
+
+# ----------------------------- #
+#          AUTO-UPDATE
+# ----------------------------- #
+# includes network check and such 
+
+# Check for network connectivity
+check_network() {
+  if ! ping -c 1 google.com &>/dev/null; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+# Print message with color and italics
+print_msg() {
+  local msg=$1
+  local color=$2
+  echo -e "\033[3;${color}m${msg}\033[0m"
+}
+
+# Auto-update .bashrc if a newer version is available
+update_bashrc() {
+  local bashrc_path="$HOME/.bashrc"
+  local github_url="https://gh.zod.tf/bashbits/raw/master/.bashrc"
+
+  # Check if network is available
+  if ! check_network; then
+    print_msg "No network connection. Autoupdate cannot be performed." "31"
+    return
+  fi
+
+  # Extract local version from the last occurrence of 'v' in the second line of .bashrc
+  local local_version=$(sed -n '2p' "$bashrc_path" | awk -F'v' '{print $NF}')
+
+  # Fetch remote version from GitHub
+  local remote_version=$(curl -sSL "$github_url" | sed -n '2p' | awk -F'v' '{print $NF}')
+
+  # Compare versions and prompt for update if necessary
+  if [[ "$local_version" != "$remote_version" ]]; then
+    echo -e "A new version of .bashrc is available. Current: \033[0;31m$local_version\033[0m -> New: \033[0;32m$remote_version\033[0m"
+    echo "To update, run 'autoupdate_bashrc'"
+  fi
+}
+
+# Alias to auto-update .bashrc
+alias autoupdate_bashrc="curl -sSL -o $HOME/.bashrc https://gh.zod.tf/bashbits/raw/master/.bashrc && source $HOME/.bashrc && echo 'Updated and sourced .bashrc'"
+
+# Add the check to your .bashrc
+update_bashrc
+# ----------------------------- #
+
 
 # ----------------------------- #
 ## ANSI COLOR ENVIRONMENT VARS
