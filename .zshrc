@@ -1,8 +1,12 @@
-# zod.tf .zshrc macOS 13.5.1 Ventura
-# .zshrc v2.2.2
+# zod.tf .zshrc macOS 14.5 Sonoma
+# .zshrc v2.3.0
 # ------------------
 # 
 # CHANGELOG
+#
+# v2.3.0 
+# - Added internet connectivity check to auto-update function
+# - Updated tested macOS version of deployment
 #
 # v2.2.2 - added pss() function to create file from current clipboard contents CREDIT: (https://apple.stackexchange.com/a/391795/497602)
 # v2.2.1 - fix an oopsie (arg check in setTerminalText)
@@ -34,14 +38,27 @@
 
 ####################################################
 # UPDATE NOTIFICATIONS & AUTO-UPDATE FUNCTIONALITY #
-#      -- written by chatgpt4 + plugins --         # 
+#      -- written by chatgpt4o mostly --         # 
 #################################################### 
 # > use env var ZSHRC_CHECKUPDATE to disable the update notifications if desired. 
+
+# Define a function to print messages with ANSI escape codes for color and italics
+function print_msg() {
+  local msg=$1
+  local color=$2
+  echo -e "\033[3;${color}m${msg}\033[0m"
+}
 
 # Auto-update .zshrc if a newer version is available
 function update_zshrc() {
   # Check if ZSHRC_AUTOUPDATE is set to a truthy value
   if [[ "$ZSHRC_AUTOUPDATE" == "0" || "$ZSHRC_AUTOUPDATE" == "false" || "$ZSHRC_AUTOUPDATE" == "FALSE" ]]; then
+    return
+  fi
+
+  # Check for network connectivity
+  if ! ping -c 1 google.com &>/dev/null; then
+    print_msg "No network connection. Autoupdate cannot be performed." "31"
     return
   fi
 
@@ -66,7 +83,6 @@ alias autoupdate_zshrc="curl -sSL -o $HOME/.zshrc https://gh.zod.tf/bashbits/raw
 
 # Add the check to your .zshrc
 update_zshrc
-
 
 
 #################################################### 
