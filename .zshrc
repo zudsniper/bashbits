@@ -1,8 +1,11 @@
 # zod.tf .zshrc macOS 14.5 Sonoma
-# .zshrc v2.3.0
+# .zshrc v2.3.1
 # ------------------
 # 
 # CHANGELOG
+#
+# v2.3.1 
+# - adding pyenv support 
 #
 # v2.3.0 
 # - Added internet connectivity check to auto-update function
@@ -110,9 +113,22 @@ short_prompt
 alias lsa="ls -lhrtaG"
 alias ls="ls -G"
 
-# python3 bruh
-# NOTE: this will break a lot of stuff on macOS versions below catalina (10.15.7)
-alias python="python3"
+# python interpreter setup
+# Check if pyenv is installed
+if command -v pyenv 1>/dev/null 2>&1; then
+  # If pyenv is installed, initialize pyenv and set up virtualenv integration
+  eval "$(pyenv init --path)"
+  eval "$(pyenv virtualenv-init -)"   # Initialize pyenv-virtualenv
+  
+  # Alias python and python3 to pyenv's global Python interpreter
+  alias python="$(pyenv which python)"
+  alias python3="$(pyenv which python3)"
+else
+  # If pyenv is not installed, alias python and python3 to Homebrew Python 3
+  alias python="/usr/local/bin/python3"
+  alias python3="/usr/local/bin/python3"
+fi
+
 
 # ====== gist convenience functions ====== #
 # NOTE: development in gists helper functions
