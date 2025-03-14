@@ -1,5 +1,5 @@
 # zod's ~/.bashrc for most linux distros using bash
-# .bashrc v4.5.0
+# .bashrc v4.6.0
 # --------------- 
 #
 #################################################################
@@ -25,7 +25,9 @@
 # ---------------  
 #
 # CHANGELOG
-# 
+# v4.6.0
+# - fix network checks to not hang 
+#
 # v4.5.0
 # - added auto-update functionality based on the implemented auto-update functionality in my .zshrc
 # 
@@ -109,7 +111,7 @@ fi
 
 # Check for network connectivity
 check_network() {
-  if ! ping -c 1 google.com &>/dev/null; then
+  if ! ping -c 1 -W 1 google.com &>/dev/null; then
     return 1
   else
     return 0
@@ -151,7 +153,7 @@ update_bashrc() {
 alias autoupdate_bashrc="curl -sSL -o $HOME/.bashrc https://gh.zod.tf/bashbits/raw/master/.bashrc && source $HOME/.bashrc && echo 'Updated and sourced .bashrc'"
 
 # Add the check to your .bashrc
-update_bashrc
+# update_bashrc  # Commented out to prevent hanging on startup
 # ----------------------------- #
 
 
@@ -161,11 +163,14 @@ update_bashrc
 # Check if .ansi_colors.sh exists, and if not, download it from Github
 if [ ! -f "$HOME/.ansi_colors.sh" ]; then
   echo "${A_LIGHTGREY}Downloading ${A_BOLD}.ansi_colors.sh${A_RESET}${A_LIGHTGRAY}...${A_RESET}"
-  curl -sSf "https://raw.githubusercontent.com/zudsniper/bashbits/master/.ansi_colors.sh" > "$HOME/.ansi_colors.sh"
+  # Add timeout to prevent hanging
+  curl -sSf --connect-timeout 3 --max-time 5 "https://raw.githubusercontent.com/zudsniper/bashbits/master/.ansi_colors.sh" > "$HOME/.ansi_colors.sh" || echo "Failed to download .ansi_colors.sh"
 fi
 
-# source the colors
-. "$HOME/.ansi_colors.sh"
+# source the colors only if the file exists
+if [ -f "$HOME/.ansi_colors.sh" ]; then
+  . "$HOME/.ansi_colors.sh"
+fi
 # ----------------------------- #
 
 #################################################################
