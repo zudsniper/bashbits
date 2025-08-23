@@ -6,6 +6,20 @@
 ### by [@zudsniper](https://github.com/zudsniper)  
 
 
+# Update (`2025-08-22`)
+> Been a while. Here's a `curl` one-liner for the thing I added. That's all I got. It's been a tough few years. Just gotta keep going. keep on going.
+
+### `jsonc2json.sh` 
+I have no idea how this doesn't already exist. So here. Should probably be its own standalone, but here it is. 
+```sh
+$ bash <(curl -fsSL https://raw.githubusercontent.com/zudsniper/bashbits/master/installers/get_jsonc2json.sh)
+```
+
+## `killport` 
+see [the repo](https://github.com/zudsniper/killport) for this cli tool. bash!  
+
+---
+
 ## ABSTRACT
 I find myself often in the situation where I wish I had a script I wrote in the past available easily -- and indeed, not entirely lost to time. The purpose of this repository is to keep this situation from occuring as best as possible. The focus is on `bash` scripts, and UNIX environments, but this is not enforced[^2] and has never been a hard-and-fast rule anyway. 
 This project is pretty much entirely self-serving, but perhaps it can help others in some way at some point. If you find yourself using it, let me know. That would be neat. If you want to contribute, see [CONTRIBUTING](#contributing), and thanks!  
