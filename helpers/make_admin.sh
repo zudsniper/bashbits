@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # make_admin.sh
 # Create/update a UNIX user, install an SSH public key, and enable passwordless sudo.
-# Works on Debian/Ubuntu, RHEL/CentOS/Rocky/Alma/Fedora/Amazon Linux, and Alpine.
+# Supports Debian/Ubuntu, RHEL/CentOS/Rocky/Alma/Fedora/Amazon Linux, and Alpine.
 
 set -Eeuo pipefail
 
 ################################
 # Minimal, safe ANSI formatting #
 ################################
-# Only enable colors if stdout is a TTY
 if [[ -t 1 ]]; then
   BOLD=$'\033[1m'
   DIM=$'\033[2m'
@@ -27,9 +26,7 @@ warn()  { printf "%s\n" "${YELLOW}[WARN]${RESET}  $*"; }
 err()   { printf "%s\n" "${RED}[ERROR]${RESET} $*" >&2; }
 die()   { err "$*"; exit 1; }
 
-on_error() {
-  err "An error occurred on line ${BASH_LINENO[0]}. Aborting."
-}
+on_error() { err "An error occurred on line ${BASH_LINENO[0]}. Aborting."; }
 trap on_error ERR
 
 #################
@@ -87,21 +84,13 @@ EOF
 ARGS=()
 while (( "$#" )); do
   case "${1:-}" in
-    -y|--yes|--non-interactive)
-      ASSUME_YES="true"; shift ;;
-    --pubkey-file)
-      [[ "${2:-}" ]] || die "--pubkey-file requires a path"
-      PUBKEY_FILE="${2}"; shift 2 ;;
-    --shell)
-      [[ "${2:-}" ]] || die "--shell requires a path (e.g., /bin/bash)"
-      PREFERRED_SHELL="${2}"; shift 2 ;;
-    -h|--help)
-      print_help; exit 0 ;;
+    -y|--yes|--non-interactive) ASSUME_YES="true"; shift ;;
+    --pubkey-file) [[ "${2:-}" ]] || die "--pubkey-file requires a path"; PUBKEY_FILE="${2}"; shift 2 ;;
+    --shell) [[ "${2:-}" ]] || die "--shell requires a path (e.g., /bin/bash)"; PREFERRED_SHELL="${2}"; shift 2 ;;
+    -h|--help) print_help; exit 0 ;;
     --) shift; break ;;
-    -*)
-      die "Unknown option: $1 (use --help)" ;;
-    *)
-      ARGS+=("$1"); shift ;;
+    -*) die "Unknown option: $1 (use --help)" ;;
+    *) ARGS+=("$1"); shift ;;
   esac
 done
 (( "$#" )) && ARGS+=("$@")
@@ -124,22 +113,22 @@ if [[ -f /etc/os-release ]]; then
     *rhel*|*fedora*|*centos*|*almalinux*|*rocky*) OS_FAMILY="rhel"; SUDO_GROUP="wheel" ;;
     *alpine*) OS_FAMILY="alpine"; SUDO_GROUP="wheel" ;;
     *) OS_FAMILY="${ID:-unknown}" ;;
-  case_esac_fix:
   esac
 else
   warn "/etc/os-release not found; assuming Debian-like."
   OS_FAMILY="debian"; SUDO_GROUP="sudo"
 fi
-# If the chosen group doesn't exist but the other common one does, switch.
+
+# If chosen group doesn't exist but a common alternative does, switch.
 if ! getent group "${SUDO_GROUP}" >/dev/null 2>&1; then
   if getent group wheel >/dev/null 2>&1; then SUDO_GROUP="wheel"
-  elif getent group sudo  >/dev/null 2>&1; then SUDO_GROUP="sudo"
+  elif getent group sudo >/dev/null 2>&1; then SUDO_GROUP="sudo"
   else
     warn "Neither 'sudo' nor 'wheel' exist; creating '${SUDO_GROUP}'."
     groupadd -f "${SUDO_GROUP}"
   fi
 fi
-info "OS: ${BOLD}${OS_FAMILY}${RESET} | sudo group: ${BOLD}${SUDO_GROUP}${RESET}"
+info "OS: ${BOLD}${OS_FAMILY}${RESET} | admin group: ${BOLD}${SUDO_GROUP}${RESET}"
 
 #################################
 # Ensure sudo/visudo available  #
@@ -149,31 +138,20 @@ ensure_pkg() {
   if ! command -v "$bin" >/dev/null 2>&1; then
     warn "Missing '${bin}'. Attempting install..."
     case "${OS_FAMILY}" in
-      debian)
-        apt-get update -y
-        apt-get install -y "${pkg}"
-        ;;
-      rhel)
-        if command -v dnf >/dev/null 2>&1; then dnf install -y "${pkg}"; else yum install -y "${pkg}"; fi
-        ;;
-      alpine)
-        apk add --no-cache "${pkg}"
-        ;;
-      *)
-        die "Unknown OS family '${OS_FAMILY}'. Install '${pkg}' manually and re-run."
-        ;;
+      debian) apt-get update -y && apt-get install -y "${pkg}" ;;
+      rhel)   if command -v dnf >/dev/null 2>&1; then dnf install -y "${pkg}"; else yum install -y "${pkg}"; fi ;;
+      alpine) apk add --no-cache "${pkg}" ;;
+      *)      die "Unknown OS family '${OS_FAMILY}'. Install '${pkg}' manually and re-run." ;;
     esac
   fi
 }
 ensure_pkg sudo sudo
-ensure_pkg visudo sudo   # visudo comes with sudo
+ensure_pkg visudo sudo   # visudo ships with sudo
 
 #########################################
 # Read/validate SSH public key content  #
 #########################################
-read_stdin_if_piped() {
-  if [[ ! -t 0 ]]; then cat -; fi
-}
+read_stdin_if_piped() { if [[ ! -t 0 ]]; then cat -; fi; }
 
 PUBKEY_CONTENT=""
 if [[ -n "${PUBKEY_ARG:-}" && "${PUBKEY_ARG}" != "-" ]]; then
@@ -186,7 +164,7 @@ if [[ -z "${PUBKEY_CONTENT}" && -n "${PUBKEY_FILE}" ]]; then
   PUBKEY_CONTENT="$(<"${PUBKEY_FILE}")"
 fi
 if [[ -z "${PUBKEY_CONTENT}" ]]; then
-  # Last attempt: if piped but user forgot "-"
+  # If piped but user forgot "-", still accept it
   if [[ ! -t 0 ]]; then PUBKEY_CONTENT="$(cat -)"; fi
 fi
 [[ -z "${PUBKEY_CONTENT}" ]] && { print_help; die "No SSH public key provided (arg, file, or stdin)."; }
@@ -232,7 +210,6 @@ create_user_if_needed
 # Ensure home and shell
 USER_HOME="$(getent passwd "${USERNAME}" | cut -d: -f6)"
 [[ -d "${USER_HOME}" ]] || { warn "Home dir missing at ${USER_HOME}; creating."; mkdir -p "${USER_HOME}"; chown "${USERNAME}:${USERNAME}" "${USER_HOME}"; }
-# Set shell (warn if not in /etc/shells)
 if ! grep -qxF "${PREFERRED_SHELL}" /etc/shells 2>/dev/null; then
   warn "Shell ${PREFERRED_SHELL} not in /etc/shells; chsh may fail."
 fi
@@ -274,7 +251,7 @@ ${USERNAME} ALL=(ALL) NOPASSWD:ALL
 Defaults:${USERNAME} !requiretty
 EOF
 
-if visudo -c -f "${TMP_SUDOERS}" >/dev/null; then
+if visudo -c -f "${TMP_SUDOERS}" >/dev/null 2>&1; then
   install -m 0440 "${TMP_SUDOERS}" "${SUDOERS_FILE}"
   ok "Installed NOPASSWD sudo rule at ${SUDOERS_FILE}."
 else
